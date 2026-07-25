@@ -125,7 +125,8 @@ function formatRangeVal(input, varDef) {
 function renderCvarModule(mod, state) {
   const modState = state.modules[mod.id] || {};
   const vars     = modState.vars || {};
-  const game     = state.game || 'cs16';
+  let game       = state.game || 'cs16';
+  if (game === 'hl' || game === 'sven') game = 'cs16';
 
   let html = '';
   for (const section of mod.sections) {

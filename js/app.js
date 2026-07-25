@@ -12,6 +12,7 @@ const APP = {
   state: {
     platform: 'steam',
     activeModule: 'identity',
+    activeTool: 'cfg',
     // Module data: { enabled, vars }
     modules: {},
     // Keybinds: { KEY: 'command' }
@@ -94,7 +95,15 @@ const APP = {
         b.classList.toggle('active', b.dataset.game === game));
       const logoSub = document.getElementById('logo-sub');
       if (logoSub) {
-        const names = { cs16: 'Counter-Strike 1.6', css: 'Counter-Strike: Source', cs2: 'Counter-Strike 2 / GO' };
+        const names = {
+          cs15: 'Counter-Strike 1.5',
+          cs16: 'Counter-Strike 1.6',
+          cscz: 'Condition Zero',
+          hl: 'Half-Life',
+          sven: 'Sven Co-op',
+          css: 'Counter-Strike: Source',
+          cs2: 'Counter-Strike 2'
+        };
         logoSub.textContent = names[game] || 'Counter-Strike 1.6';
       }
       const fnInput = document.getElementById('filename-input');
@@ -151,6 +160,9 @@ const APP = {
 
     // Mobile sidebar toggle
     this.initMobileSidebar();
+
+    // Select default tool on boot
+    this.selectTool(this.state.activeTool || 'modules');
 
     this.generateAndPreview();
     this.initCrosshairCanvas();
@@ -510,7 +522,8 @@ const APP = {
     addLine(`//  Fecha: ${new Date().toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' })}`);
     addLine(`//  ================================================================`);
 
-    const game = this.state.game || 'cs16';
+    let game = this.state.game || 'cs16';
+    if (game === 'hl' || game === 'sven') game = 'cs16';
 
     for (const mod of MODULES_CONFIG) {
       const modState = this.state.modules[mod.id] || {};
@@ -640,6 +653,7 @@ const APP = {
     const pathEl = document.getElementById('install-path');
     const cmdEl  = document.getElementById('exec-cmd');
     const fname  = this.state.filename || 'config';
+
     if (pathEl) {
       if (game === 'cs15') {
         pathEl.innerHTML = `<span class="path-label">Ruta CS 1.5 WON:</span><code>Sierra/Half-Life/cstrike/</code>`;
@@ -649,6 +663,10 @@ const APP = {
         } else {
           pathEl.innerHTML = `<span class="path-label">No-Steam:</span><code>Condition Zero/czero/</code>`;
         }
+      } else if (game === 'hl') {
+        pathEl.innerHTML = `<span class="path-label">Steam:</span><code>Steam/steamapps/common/Half-Life/valve/</code>`;
+      } else if (game === 'sven') {
+        pathEl.innerHTML = `<span class="path-label">Steam:</span><code>Steam/steamapps/common/Sven Co-op/svencoop/</code>`;
       } else if (game === 'css') {
         pathEl.innerHTML = `<span class="path-label">CS:S Path:</span><code>Steam/steamapps/common/Counter-Strike Source/cstrike/cfg/</code>`;
       } else if (game === 'cs2') {
@@ -661,6 +679,35 @@ const APP = {
         }
       }
     }
+
+    // Update spray install paths
+    const sprayPathEl = document.getElementById('spray-install-path');
+    if (sprayPathEl) {
+      if (game === 'cs15') {
+        sprayPathEl.innerHTML = `<span class="path-label">Ruta CS 1.5 WON:</span><code>Sierra/Half-Life/cstrike/</code>`;
+      } else if (game === 'cscz') {
+        if (p === 'steam') {
+          sprayPathEl.innerHTML = `<span class="path-label">Steam:</span><code>Steam/steamapps/common/Half-Life/czero/</code>`;
+        } else {
+          sprayPathEl.innerHTML = `<span class="path-label">No-Steam:</span><code>Condition Zero/czero/</code>`;
+        }
+      } else if (game === 'hl') {
+        sprayPathEl.innerHTML = `<span class="path-label">Steam:</span><code>Steam/steamapps/common/Half-Life/valve/</code>`;
+      } else if (game === 'sven') {
+        sprayPathEl.innerHTML = `<span class="path-label">Steam:</span><code>Steam/steamapps/common/Sven Co-op/svencoop/</code>`;
+      } else if (game === 'css') {
+        sprayPathEl.innerHTML = `<span class="path-label">CS:S Path:</span><code>Steam/steamapps/common/Counter-Strike Source/cstrike/</code>`;
+      } else if (game === 'cs2') {
+        sprayPathEl.innerHTML = `<span class="path-label">CS2:</span><code>No compatible con sprays personalizados</code>`;
+      } else {
+        if (p === 'steam') {
+          sprayPathEl.innerHTML = `<span class="path-label">Steam:</span><code>Steam/steamapps/common/Half-Life/cstrike/</code>`;
+        } else {
+          sprayPathEl.innerHTML = `<span class="path-label">No-Steam:</span><code>counter-strike/cstrike/</code> o <code>valve/cstrike/</code>`;
+        }
+      }
+    }
+
     if (cmdEl) cmdEl.textContent = `exec ${fname}.cfg`;
   },
 
@@ -1194,17 +1241,77 @@ const APP = {
     const collapseModulesBtn = document.getElementById('btn-collapse-modules');
     if (collapseModulesBtn) {
       collapseModulesBtn.addEventListener('click', () => {
-        this.toggleSidebarSection('modules');
+        this.selectTool('modules');
+        if (!collapseModulesBtn.classList.contains('open')) {
+          this.toggleSidebarSection('modules');
+        }
       });
     }
     ['graffiti', 'wallpaper', 'sounds', 'hud'].forEach(id => {
       const btn = document.getElementById(`btn-collapse-${id}`);
       if (btn) {
         btn.addEventListener('click', () => {
-          this.toggleSidebarSection(id);
+          this.selectTool(id);
+          if (!btn.classList.contains('open')) {
+            this.toggleSidebarSection(id);
+          }
         });
       }
     });
+
+    // --- Spray File Uploader Listeners ---
+    const sprayDropArea = document.getElementById('spray-drop-area');
+    const sprayFileInput = document.getElementById('spray-file-input');
+    const sprayDownloadWadBtn = document.getElementById('btn-download-wad');
+    const sprayResampleChk = document.getElementById('point-resample');
+
+    if (sprayDropArea && sprayFileInput) {
+      sprayDropArea.addEventListener('click', () => sprayFileInput.click());
+      
+      sprayFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          this.sprayFile = file;
+          this.handleSprayFileSelect(file);
+        }
+      });
+      
+      // Drag & Drop
+      ['dragenter', 'dragover'].forEach(eventName => {
+        sprayDropArea.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          sprayDropArea.classList.add('drag-over');
+        }, false);
+      });
+      ['dragleave', 'drop'].forEach(eventName => {
+        sprayDropArea.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          sprayDropArea.classList.remove('drag-over');
+        }, false);
+      });
+      sprayDropArea.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const file = dt.files[0];
+        if (file && file.type.startsWith('image/')) {
+          this.sprayFile = file;
+          this.handleSprayFileSelect(file);
+        }
+      }, false);
+    }
+    
+    if (sprayResampleChk) {
+      sprayResampleChk.addEventListener('change', () => {
+        if (this.sprayFile) {
+          this.handleSprayFileSelect(this.sprayFile);
+        }
+      });
+    }
+
+    if (sprayDownloadWadBtn) {
+      sprayDownloadWadBtn.addEventListener('click', () => {
+        this.downloadWadFile();
+      });
+    }
 
     const copyrightBtn = document.getElementById('neon-copyright-btn');
     if (copyrightBtn) {
@@ -1222,6 +1329,81 @@ const APP = {
     }
   },
 
+  selectTool(toolId) {
+    this.state.activeTool = toolId;
+    
+    // 1. Update active states on sidebar collapse buttons
+    document.querySelectorAll('.sidebar-collapse-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    // For modules, the ID is btn-collapse-modules
+    const activeBtn = document.getElementById(`btn-collapse-${toolId}`);
+    if (activeBtn) {
+      activeBtn.classList.add('active');
+    }
+    
+    // 2. Hide all workspaces, show the active one
+    const contentArea = document.getElementById('content-area');
+    const previewPanel = document.getElementById('preview-panel');
+    if (!contentArea || !previewPanel) return;
+    
+    // Content Views
+    const modulePanels = document.getElementById('module-panels');
+    const graffitiContentView = document.getElementById('graffiti-content-view');
+    const placeholderContentView = document.getElementById('placeholder-content-view');
+    
+    // Preview Views
+    const cfgPreviewContent = document.getElementById('cfg-preview-content');
+    const graffitiPreviewContent = document.getElementById('graffiti-preview-content');
+    const placeholderPreviewContent = document.getElementById('placeholder-preview-content');
+    
+    if (toolId === 'modules') {
+      if (modulePanels) modulePanels.classList.remove('hidden');
+      if (graffitiContentView) graffitiContentView.classList.add('hidden');
+      if (placeholderContentView) placeholderContentView.classList.add('hidden');
+      
+      if (cfgPreviewContent) cfgPreviewContent.classList.remove('hidden');
+      if (graffitiPreviewContent) graffitiPreviewContent.classList.add('hidden');
+      if (placeholderPreviewContent) placeholderPreviewContent.classList.add('hidden');
+      
+      this.updateInstallPath();
+    } else if (toolId === 'graffiti') {
+      if (modulePanels) modulePanels.classList.add('hidden');
+      if (graffitiContentView) graffitiContentView.classList.remove('hidden');
+      if (placeholderContentView) placeholderContentView.classList.add('hidden');
+      
+      if (cfgPreviewContent) cfgPreviewContent.classList.add('hidden');
+      if (graffitiPreviewContent) graffitiPreviewContent.classList.remove('hidden');
+      if (placeholderPreviewContent) placeholderPreviewContent.classList.add('hidden');
+      
+      this.updateInstallPath();
+      this.drawSprayToCanvas();
+    } else {
+      if (modulePanels) modulePanels.classList.add('hidden');
+      if (graffitiContentView) graffitiContentView.classList.add('hidden');
+      if (placeholderContentView) placeholderContentView.classList.remove('hidden');
+      
+      if (cfgPreviewContent) cfgPreviewContent.classList.add('hidden');
+      if (graffitiPreviewContent) graffitiPreviewContent.classList.add('hidden');
+      if (placeholderPreviewContent) placeholderPreviewContent.classList.remove('hidden');
+      
+      const pTitle = document.getElementById('placeholder-title');
+      const pIcon = document.getElementById('placeholder-icon');
+      const pDesc = document.getElementById('placeholder-desc');
+      
+      const toolDetails = {
+        wallpaper: { title: 'GUI Customizer', icon: '🖼️', desc: 'Carga, recorta y edita imágenes para fondos de menús del juego y splash screens personalizados.' },
+        sounds: { title: 'Sounds / Packs', icon: '🔊', desc: 'Compila y personaliza paquetes de audio para el juego seleccionado (voces, sonidos competitivos).' },
+        hud: { title: 'HUB Customizer', icon: '📺', desc: 'Personaliza completamente el radar, color de vida y escala del HUD del juego.' }
+      };
+      
+      const details = toolDetails[toolId] || { title: 'Herramienta', icon: '🛠️', desc: 'Esta sección estará disponible próximamente.' };
+      if (pTitle) pTitle.textContent = details.title;
+      if (pIcon) pIcon.textContent = details.icon;
+      if (pDesc) pDesc.textContent = details.desc;
+    }
+  },
+
   setGame(game) {
     this.state.game = game;
 
@@ -1236,9 +1418,11 @@ const APP = {
       const names = {
         cs15: 'Counter-Strike 1.5',
         cs16: 'Counter-Strike 1.6',
-        cscz: 'Counter-Strike: Condition Zero',
+        cscz: 'Condition Zero',
+        hl: 'Half-Life',
+        sven: 'Sven Co-op',
         css: 'Counter-Strike: Source',
-        cs2: 'Counter-Strike 2 / GO'
+        cs2: 'Counter-Strike 2'
       };
       logoSub.textContent = names[game] || 'Counter-Strike 1.6';
     }
@@ -1414,9 +1598,13 @@ const APP = {
     const logoSub = document.getElementById('logo-sub');
     if (logoSub) {
       const names = {
+        cs15: 'Counter-Strike 1.5',
         cs16: 'Counter-Strike 1.6',
+        cscz: 'Condition Zero',
+        hl: 'Half-Life',
+        sven: 'Sven Co-op',
         css: 'Counter-Strike: Source',
-        cs2: 'Counter-Strike 2 / GO'
+        cs2: 'Counter-Strike 2'
       };
       logoSub.textContent = names[this.state.game] || 'Counter-Strike 1.6';
     }
@@ -1617,6 +1805,318 @@ const APP = {
     this.setGame(game);
     const dropdown = document.getElementById(`${game}-dropdown`);
     if (dropdown) dropdown.classList.remove('open');
+  },
+
+  drawSprayToCanvas(imgSrc) {
+    const canvas = document.getElementById('spray-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    if (imgSrc) {
+      const img = new Image();
+      img.onload = () => {
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      };
+      img.src = imgSrc;
+    } else {
+      ctx.strokeStyle = 'rgba(0, 255, 136, 0.4)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height / 2, 24, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      ctx.fillStyle = 'rgba(0, 255, 136, 0.4)';
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height / 2, 4, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.beginPath();
+      ctx.moveTo(canvas.width / 2 - 36, canvas.height / 2);
+      ctx.lineTo(canvas.width / 2 - 12, canvas.height / 2);
+      ctx.moveTo(canvas.width / 2 + 12, canvas.height / 2);
+      ctx.lineTo(canvas.width / 2 + 36, canvas.height / 2);
+      ctx.moveTo(canvas.width / 2, canvas.height / 2 - 36);
+      ctx.lineTo(canvas.width / 2, canvas.height / 2 - 12);
+      ctx.moveTo(canvas.width / 2, canvas.height / 2 + 12);
+      ctx.lineTo(canvas.width / 2, canvas.height / 2 + 36);
+      ctx.stroke();
+    }
+  },
+
+  handleSprayFileSelect(file) {
+    if (!file) return;
+    
+    const statusBox = document.getElementById('conversion-status');
+    const statusText = document.getElementById('conversion-status-text');
+    const downloadWadBtn = document.getElementById('btn-download-wad');
+    const dimsVal = document.getElementById('spray-dimensions');
+    const pixelsVal = document.getElementById('spray-total-pixels');
+    const compatVal = document.getElementById('spray-compatibility');
+    
+    if (statusBox) statusBox.classList.add('hidden');
+    if (downloadWadBtn) downloadWadBtn.disabled = true;
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.drawSprayToCanvas(e.target.result);
+      
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width;
+        let h = img.height;
+        const maxPixels = 12288;
+        let scale = Math.sqrt(maxPixels / (w * h));
+        if (scale < 1) {
+          w = Math.floor(w * scale);
+          h = Math.floor(h * scale);
+        }
+        w = Math.max(16, Math.round(w / 16) * 16);
+        h = Math.max(16, Math.round(h / 16) * 16);
+        while (w * h > maxPixels) {
+          if (w > h) w -= 16;
+          else h -= 16;
+        }
+        
+        if (dimsVal) dimsVal.textContent = `${w} x ${h} px`;
+        if (pixelsVal) pixelsVal.textContent = `${w * h} px`;
+        
+        const isPointResample = document.getElementById('point-resample')?.checked || false;
+        
+        try {
+          if (statusBox && statusText) {
+            statusBox.className = 'conversion-status-box';
+            statusBox.classList.remove('hidden');
+            statusText.textContent = `Procesando ${file.name}...`;
+          }
+          
+          this.convertImageToWad(img, w, h, isPointResample, (wadArrayBuffer) => {
+            this.wadBuffer = wadArrayBuffer;
+            if (downloadWadBtn) downloadWadBtn.disabled = false;
+            
+            if (statusBox && statusText) {
+              statusBox.className = 'conversion-status-box';
+              statusText.textContent = `✓ Conversión exitosa (${file.name})`;
+            }
+            if (compatVal) compatVal.textContent = '✓ Válido (GoldSrc WAD3)';
+            showToast('Imagen cargada y procesada', 'success');
+          });
+        } catch (err) {
+          console.error(err);
+          if (statusBox && statusText) {
+            statusBox.className = 'conversion-status-box error';
+            statusText.textContent = `✗ Error al convertir ${file.name}`;
+          }
+          if (compatVal) compatVal.textContent = '❌ Error de formato';
+          showToast('Error al procesar la imagen', 'error');
+        }
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  },
+
+  convertImageToWad(img, w, h, usePointResample, callback) {
+    const canvases = [];
+    const ctxs = [];
+    const sizes = [
+      { w, h },
+      { w: w/2, h: h/2 },
+      { w: w/4, h: h/4 },
+      { w: w/8, h: h/8 }
+    ];
+    
+    for (let m = 0; m < 4; m++) {
+      const c = document.createElement('canvas');
+      c.width = sizes[m].w;
+      c.height = sizes[m].h;
+      const ctx = c.getContext('2d');
+      if (usePointResample) {
+        ctx.imageSmoothingEnabled = false;
+      }
+      ctx.drawImage(img, 0, 0, sizes[m].w, sizes[m].h);
+      canvases.push(c);
+      ctxs.push(ctx);
+    }
+    
+    const mip0ImgData = ctxs[0].getImageData(0, 0, w, h);
+    const mip0Pixels = mip0ImgData.data;
+    
+    const colors = [];
+    for (let i = 0; i < mip0Pixels.length; i += 4) {
+      if (mip0Pixels[i+3] < 128) continue;
+      colors.push([mip0Pixels[i], mip0Pixels[i+1], mip0Pixels[i+2]]);
+    }
+    
+    let palette = [];
+    if (colors.length === 0) {
+      palette = Array(256).fill([0, 0, 0]);
+    } else {
+      let boxes = [colors];
+      while (boxes.length < 256) {
+        let splitIndex = -1;
+        let maxRange = -1;
+        for (let i = 0; i < boxes.length; i++) {
+          if (boxes[i].length < 2) continue;
+          let rMin = 255, rMax = 0, gMin = 255, gMax = 0, bMin = 255, bMax = 0;
+          for (let c of boxes[i]) {
+            if (c[0] < rMin) rMin = c[0]; if (c[0] > rMax) rMax = c[0];
+            if (c[1] < gMin) gMin = c[1]; if (c[1] > gMax) gMax = c[1];
+            if (c[2] < bMin) bMin = c[2]; if (c[2] > bMax) bMax = c[2];
+          }
+          let rRange = rMax - rMin, gRange = gMax - gMin, bRange = bMax - bMin;
+          let range = Math.max(rRange, gRange, bRange);
+          if (range > maxRange) {
+            maxRange = range;
+            splitIndex = i;
+          }
+        }
+        if (splitIndex === -1) break;
+        
+        let box = boxes[splitIndex];
+        let rMin = 255, rMax = 0, gMin = 255, gMax = 0, bMin = 255, bMax = 0;
+        for (let c of box) {
+          if (c[0] < rMin) rMin = c[0]; if (c[0] > rMax) rMax = c[0];
+          if (c[1] < gMin) gMin = c[1]; if (c[1] > gMax) gMax = c[1];
+          if (c[2] < bMin) bMin = c[2]; if (c[2] > bMax) bMax = c[2];
+        }
+        let rRange = rMax - rMin, gRange = gMax - gMin, bRange = bMax - bMin;
+        let axis = 0;
+        if (gRange >= rRange && gRange >= bRange) axis = 1;
+        else if (bRange >= rRange && bRange >= gRange) axis = 2;
+        
+        box.sort((a, b) => a[axis] - b[axis]);
+        let mid = Math.floor(box.length / 2);
+        boxes.splice(splitIndex, 1, box.slice(0, mid), box.slice(mid));
+      }
+      
+      palette = boxes.map(box => {
+        let rSum = 0, gSum = 0, bSum = 0;
+        for (let c of box) {
+          rSum += c[0]; gSum += c[1]; bSum += c[2];
+        }
+        return [Math.round(rSum / box.length), Math.round(gSum / box.length), Math.round(bSum / box.length)];
+      });
+      
+      while (palette.length < 256) {
+        palette.push([0, 0, 0]);
+      }
+    }
+    
+    palette[255] = [0, 0, 255];
+    
+    const findClosestIndex = (color) => {
+      let minDistance = Infinity;
+      let index = 0;
+      for (let i = 0; i < 255; i++) {
+        let p = palette[i];
+        let d = (color[0]-p[0])**2 + (color[1]-p[1])**2 + (color[2]-p[2])**2;
+        if (d < minDistance) {
+          minDistance = d;
+          index = i;
+        }
+      }
+      return index;
+    };
+    
+    const mipsIndices = [];
+    for (let m = 0; m < 4; m++) {
+      const wMip = sizes[m].w;
+      const hMip = sizes[m].h;
+      const imgData = ctxs[m].getImageData(0, 0, wMip, hMip);
+      const pixels = imgData.data;
+      const indices = new Uint8Array(wMip * hMip);
+      
+      for (let i = 0; i < pixels.length; i += 4) {
+        if (pixels[i+3] < 128) {
+          indices[i/4] = 255;
+        } else {
+          indices[i/4] = findClosestIndex([pixels[i], pixels[i+1], pixels[i+2]]);
+        }
+      }
+      mipsIndices.push(indices);
+    }
+    
+    const mip0Size = w * h;
+    const mip1Size = (w/2) * (h/2);
+    const mip2Size = (w/4) * (h/4);
+    const mip3Size = (w/8) * (h/8);
+    
+    const textureDataSize = 16 + 4 + 4 + 16 + mip0Size + mip1Size + mip2Size + mip3Size + 2 + 768;
+    const totalBufferSize = 12 + textureDataSize + 32;
+    
+    const buffer = new ArrayBuffer(totalBufferSize);
+    const view = new DataView(buffer);
+    const u8 = new Uint8Array(buffer);
+    
+    view.setUint8(0, 0x57);
+    view.setUint8(1, 0x41);
+    view.setUint8(2, 0x44);
+    view.setUint8(3, 0x33);
+    view.setUint32(4, 1, true);
+    view.setUint32(8, 12 + textureDataSize, true);
+    
+    let offset = 12;
+    const name = "{logo";
+    for (let i = 0; i < 16; i++) {
+      view.setUint8(offset + i, i < name.length ? name.charCodeAt(i) : 0);
+    }
+    offset += 16;
+    
+    view.setUint32(offset, w, true); offset += 4;
+    view.setUint32(offset, h, true); offset += 4;
+    
+    const mip0Offset = 40;
+    const mip1Offset = mip0Offset + mip0Size;
+    const mip2Offset = mip1Offset + mip1Size;
+    const mip3Offset = mip2Offset + mip2Size;
+    view.setUint32(offset + 0, mip0Offset, true);
+    view.setUint32(offset + 4, mip1Offset, true);
+    view.setUint32(offset + 8, mip2Offset, true);
+    view.setUint32(offset + 12, mip3Offset, true);
+    offset += 16;
+    
+    u8.set(mipsIndices[0], offset); offset += mip0Size;
+    u8.set(mipsIndices[1], offset); offset += mip1Size;
+    u8.set(mipsIndices[2], offset); offset += mip2Size;
+    u8.set(mipsIndices[3], offset); offset += mip3Size;
+    
+    view.setUint16(offset, 256, true); offset += 2;
+    
+    for (let i = 0; i < 256; i++) {
+      const color = palette[i];
+      u8[offset + i*3 + 0] = color[0];
+      u8[offset + i*3 + 1] = color[1];
+      u8[offset + i*3 + 2] = color[2];
+    }
+    offset += 768;
+    
+    view.setUint32(offset, 12, true);
+    view.setUint32(offset + 4, textureDataSize, true);
+    view.setUint32(offset + 8, textureDataSize, true);
+    view.setUint8(offset + 12, 0x43);
+    view.setUint8(offset + 13, 0);
+    view.setUint16(offset + 14, 0, true);
+    for (let i = 0; i < 16; i++) {
+      view.setUint8(offset + 16 + i, i < name.length ? name.charCodeAt(i) : 0);
+    }
+    
+    callback(buffer);
+  },
+
+  downloadWadFile() {
+    if (!this.wadBuffer) return;
+    const blob = new Blob([this.wadBuffer], { type: 'application/octet-stream' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.download = 'tempdecal.wad';
+    a.href = url;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Archivo tempdecal.wad descargado', 'success');
   },
 };
 
