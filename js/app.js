@@ -12,7 +12,7 @@ const APP = {
   state: {
     platform: 'steam',
     activeModule: 'identity',
-    activeTool: 'cfg',
+    activeTool: 'modules',
     // Module data: { enabled, vars }
     modules: {},
     // Keybinds: { KEY: 'command' }
