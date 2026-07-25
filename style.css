@@ -2577,7 +2577,7 @@ body.theme-matrix-code {
 }
 
 .spray-preview-wall {
-  height: 220px;
+  height: 350px;
   margin: 16px;
   border-radius: 8px;
   background: radial-gradient(circle, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.85) 100%), 
@@ -2603,10 +2603,10 @@ body.theme-matrix-code {
   color: #fff;
 }
 #spray-canvas {
-  max-width: 176px;
-  max-height: 176px;
+  max-width: 90%;
+  max-height: 90%;
   image-rendering: pixelated;
-  filter: drop-shadow(0 0 5px rgba(0,0,0,0.9));
+  filter: drop-shadow(0 0 10px rgba(0,0,0,0.95));
 }
 
 .spray-info-table {
