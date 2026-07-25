@@ -1190,7 +1190,22 @@ const APP = {
       document.querySelectorAll('.game-dropdown-menu').forEach(d => d.classList.remove('open'));
     });
 
-    // Neon copyright button to toggle views
+    // Sidebar collapse sections
+    const collapseModulesBtn = document.getElementById('btn-collapse-modules');
+    if (collapseModulesBtn) {
+      collapseModulesBtn.addEventListener('click', () => {
+        this.toggleSidebarSection('modules');
+      });
+    }
+    ['graffiti', 'wallpaper', 'sounds', 'hud'].forEach(id => {
+      const btn = document.getElementById(`btn-collapse-${id}`);
+      if (btn) {
+        btn.addEventListener('click', () => {
+          this.toggleSidebarSection(id);
+        });
+      }
+    });
+
     const copyrightBtn = document.getElementById('neon-copyright-btn');
     if (copyrightBtn) {
       copyrightBtn.addEventListener('click', () => {
@@ -1257,6 +1272,45 @@ const APP = {
     } else {
       defaultView.classList.remove('hidden');
       networksView.classList.add('hidden');
+    }
+  },
+
+  toggleSidebarSection(sectionId) {
+    const btn = document.getElementById(`btn-collapse-${sectionId}`);
+    const content = document.getElementById(`sidebar-${sectionId}-content`);
+    if (!btn || !content) return;
+
+    const isOpen = btn.classList.contains('open');
+
+    if (!isOpen) {
+      // Open
+      btn.classList.add('open');
+      content.classList.add('open');
+      const targetH = content.scrollHeight;
+      content.style.maxHeight = '0px';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        content.style.maxHeight = targetH + 'px';
+        const onEnd = (e) => {
+          if (e.propertyName !== 'max-height') return;
+          content.style.maxHeight = '';
+          content.removeEventListener('transitionend', onEnd);
+        };
+        content.addEventListener('transitionend', onEnd);
+      }));
+    } else {
+      // Close
+      content.style.maxHeight = content.scrollHeight + 'px';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        btn.classList.remove('open');
+        content.classList.remove('open');
+        content.style.maxHeight = '0px';
+        const onEnd = (e) => {
+          if (e.propertyName !== 'max-height') return;
+          content.style.maxHeight = '';
+          content.removeEventListener('transitionend', onEnd);
+        };
+        content.addEventListener('transitionend', onEnd);
+      }));
     }
   },
 

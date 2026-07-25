@@ -344,6 +344,62 @@ body {
   margin-bottom: 8px;
 }
 
+/* Sidebar Collapsible Accordion sections */
+.sidebar-collapse-wrap {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 10px;
+}
+.sidebar-collapse-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.01);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-2);
+  transition: all var(--t-fast);
+  text-align: left;
+}
+.sidebar-collapse-btn:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-1);
+}
+.sidebar-collapse-btn .collapse-icon {
+  font-size: 8px;
+  opacity: 0.6;
+  transition: transform var(--t-med) ease;
+}
+.sidebar-collapse-btn.open .collapse-icon {
+  transform: rotate(0);
+}
+.sidebar-collapse-btn:not(.open) .collapse-icon {
+  transform: rotate(-90deg);
+}
+.sidebar-collapse-content {
+  overflow: hidden;
+  transition: max-height var(--t-med) cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sidebar-collapse-content:not(.open) {
+  max-height: 0px !important;
+}
+.sidebar-placeholder {
+  padding: 14px 16px;
+  font-size: 11px;
+  color: var(--text-3);
+  font-style: italic;
+  background: rgba(0, 0, 0, 0.15);
+  border-top: 1px dashed rgba(255, 255, 255, 0.04);
+}
+
 .module-nav {
   list-style: none;
   display: flex;
