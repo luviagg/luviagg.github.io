@@ -306,8 +306,58 @@
                   💾 Descargar tempdecal.wad
                 </button>
               </div>
+
+              <!-- GUIAS Y TUTORIALES -->
+              <div class="graffiti-info-section" style="margin-top: 32px; border-top: 1px solid var(--border); padding-top: 24px;">
+                <h3 style="font-size: 14px; font-weight: 700; color: var(--text-1); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                  <span>💡</span> Guía, Límites y Tutoriales
+                </h3>
+                
+                <div class="graffiti-info-grid" style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+                  <!-- Card 1: Limits -->
+                  <div class="info-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; padding: 16px;">
+                    <h4 style="font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                      <span>⚠️</span> Límites del Motor GoldSrc (HL / Sven / CS 1.6)
+                    </h4>
+                    <p style="font-size: 11px; color: var(--text-2); line-height: 1.5; margin: 0;">
+                      El motor gráfico tiene un límite estricto de <strong>12,288 píxeles en total</strong> para grafitis customizados. Además, tanto el ancho como el alto <strong>deben ser múltiplos de 16</strong>. Nuestra herramienta reduce la escala y ajusta el tamaño automáticamente de forma inteligente.
+                    </p>
+                  </div>
+
+                  <!-- Card 2: Optimal resolutions -->
+                  <div class="info-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; padding: 16px;">
+                    <h4 style="font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                      <span>📐</span> Resoluciones Recomendadas (Proporción 1:1 y 4:3)
+                    </h4>
+                    <p style="font-size: 11px; color: var(--text-2); line-height: 1.5; margin-bottom: 8px;">
+                      Para evitar estiramientos o distorsiones visuales en el juego, te recomendamos subir imágenes cuadradas o con proporciones estándar y usar resoluciones como:
+                    </p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                      <span class="badge" style="font-size: 10px; padding: 2px 8px; border-radius: 4px; background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.2); color: var(--accent);">96x96 (1:1 - Óptimo)</span>
+                      <span class="badge" style="font-size: 10px; padding: 2px 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: var(--text-2);">112x96 (Slightly wide)</span>
+                      <span class="badge" style="font-size: 10px; padding: 2px 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: var(--text-2);">128x96 (Max ancho)</span>
+                      <span class="badge" style="font-size: 10px; padding: 2px 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: var(--text-2);">64x64 (Crispy Pixel-Art)</span>
+                    </div>
+                  </div>
+
+                  <!-- Card 3: Step-by-Step Installation Tutorial -->
+                  <div class="info-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; padding: 16px;">
+                    <h4 style="font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                      <span>📖</span> Tutorial: Cómo Instalar tu Spray en 4 Pasos
+                    </h4>
+                    <ol style="font-size: 11px; color: var(--text-2); line-height: 1.6; padding-left: 18px; margin: 0;">
+                      <li style="margin-bottom: 6px;">Subí tu imagen (preferentemente un <strong>PNG con fondo transparente</strong> para mejores resultados).</li>
+                      <li style="margin-bottom: 6px;">Presioná el botón de descarga para obtener tu archivo <code>tempdecal.wad</code>.</li>
+                      <li style="margin-bottom: 6px;">Pegá el archivo en la carpeta del juego activo (ver ruta exacta en el panel lateral derecho).</li>
+                      <li style="margin-bottom: 0;"><strong>¡Paso Clave!</strong> Hace click derecho sobre el archivo <code>tempdecal.wad</code> en Windows, selecciona <strong>Propiedades</strong>, activa la casilla de <strong>Solo Lectura (Read-Only)</strong> y dale a Aplicar. Esto evita que el juego lo reemplace por el spray por defecto al entrar.</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+              
+
           
           <!-- Other Tools Placeholder Content View -->
           <div id="placeholder-content-view" class="hidden">
