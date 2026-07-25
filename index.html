@@ -352,6 +352,22 @@
                       <li style="margin-bottom: 0;"><strong>¡Paso Clave!</strong> Hace click derecho sobre el archivo <code>tempdecal.wad</code> en Windows, selecciona <strong>Propiedades</strong>, activa la casilla de <strong>Solo Lectura (Read-Only)</strong> y dale a Aplicar. Esto evita que el juego lo reemplace por el spray por defecto al entrar.</li>
                     </ol>
                   </div>
+
+                  <!-- Card 4: Troubleshooting VirtualStore (Windows 10/11) -->
+                  <div class="info-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; padding: 16px;">
+                    <h4 style="font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                      <span>🛠️</span> ¿No cambia el grafiti en CS 1.6? (Windows 10/11)
+                    </h4>
+                    <p style="font-size: 11px; color: var(--text-2); line-height: 1.5; margin-bottom: 8px;">
+                      Si reemplazás el archivo pero el juego te sigue mostrando el spray viejo, Windows está usando una copia oculta en la carpeta de seguridad <strong>VirtualStore</strong>. Pasos para solucionarlo:
+                    </p>
+                    <ol style="font-size: 11px; color: var(--text-2); line-height: 1.6; padding-left: 18px; margin: 0;">
+                      <li style="margin-bottom: 6px;">Presioná <code>Windows + R</code>, escribí <code>%localappdata%\VirtualStore</code> y dale a Enter.</li>
+                      <li style="margin-bottom: 6px;">Navegá hasta: <code>Program Files (x86)\Counter-Strike 1.6\cstrike</code> (o la ruta de tu juego dentro de VirtualStore).</li>
+                      <li style="margin-bottom: 6px;">Borrá el archivo <code>custom.hpk</code> y cualquier <code>tempdecal.wad</code> o <code>pdecal.wad</code> viejo que encuentres ahí.</li>
+                      <li style="margin-bottom: 0;">Pegá tu nuevo <code>tempdecal.wad</code> en esa carpeta, hacé click derecho $\rightarrow$ <strong>Propiedades</strong>, activá <strong>Solo Lectura</strong> y dale a Aceptar.</li>
+                    </ol>
+                  </div>
                 </div>
               </div>
             </div>
