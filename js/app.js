@@ -1809,16 +1809,37 @@ const APP = {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
     if (imgSrc) {
       const img = new Image();
       img.onload = () => {
+        let w = img.width;
+        let h = img.height;
+        const maxPixels = 12288;
+        let scale = Math.sqrt(maxPixels / (w * h));
+        if (scale < 1) {
+          w = Math.floor(w * scale);
+          h = Math.floor(h * scale);
+        }
+        w = Math.max(16, Math.round(w / 16) * 16);
+        h = Math.max(16, Math.round(h / 16) * 16);
+        while (w * h > maxPixels) {
+          if (w > h) w -= 16;
+          else h -= 16;
+        }
+        
+        canvas.width = w;
+        canvas.height = h;
+        ctx.clearRect(0, 0, w, h);
+        
         ctx.imageSmoothingEnabled = false;
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, w, h);
       };
       img.src = imgSrc;
     } else {
+      canvas.width = 96;
+      canvas.height = 96;
+      ctx.clearRect(0, 0, 96, 96);
+      
       ctx.strokeStyle = 'rgba(0, 255, 136, 0.4)';
       ctx.lineWidth = 2;
       ctx.beginPath();
