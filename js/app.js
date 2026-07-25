@@ -1245,12 +1245,12 @@ const APP = {
         this.toggleSidebarSection('modules');
       });
     }
+
     ['graffiti', 'wallpaper', 'sounds', 'hud'].forEach(id => {
       const btn = document.getElementById(`btn-collapse-${id}`);
       if (btn) {
         btn.addEventListener('click', () => {
           this.selectTool(id);
-          this.toggleSidebarSection(id);
         });
       }
     });
