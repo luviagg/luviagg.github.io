@@ -1242,9 +1242,7 @@ const APP = {
     if (collapseModulesBtn) {
       collapseModulesBtn.addEventListener('click', () => {
         this.selectTool('modules');
-        if (!collapseModulesBtn.classList.contains('open')) {
-          this.toggleSidebarSection('modules');
-        }
+        this.toggleSidebarSection('modules');
       });
     }
     ['graffiti', 'wallpaper', 'sounds', 'hud'].forEach(id => {
@@ -1252,9 +1250,7 @@ const APP = {
       if (btn) {
         btn.addEventListener('click', () => {
           this.selectTool(id);
-          if (!btn.classList.contains('open')) {
-            this.toggleSidebarSection(id);
-          }
+          this.toggleSidebarSection(id);
         });
       }
     });
