@@ -275,28 +275,38 @@ function drawWaveform() {
   const startX = (state.startTime / state.duration) * width;
   const endX = (state.endTime / state.duration) * width;
   
-  // Draw Peaks
+  // Draw Peaks (Optimized: 2 stroke calls instead of 1000)
   ctx.lineWidth = 1.5;
+  
+  // 1. Draw Unselected peaks (left and right of selection)
+  ctx.strokeStyle = '#1b2a3c'; // muted dark blue-gray
+  ctx.beginPath();
   for (let x = 0; x < width; x++) {
+    if (x < startX || x > endX) {
+      const peakIndex = Math.floor((x / width) * state.peaks.length);
+      const peak = state.peaks[peakIndex] || { max: 0, min: 0 };
+      const maxH = peak.max * centerY * 0.9;
+      const minH = peak.min * centerY * 0.9;
+      ctx.moveTo(x, centerY - maxH);
+      ctx.lineTo(x, centerY - minH);
+    }
+  }
+  ctx.stroke();
+
+  // 2. Draw Selected peaks (inside selection)
+  ctx.strokeStyle = 'rgba(0, 255, 136, 0.75)'; // vibrant neon green selection
+  ctx.beginPath();
+  const startInt = Math.ceil(startX);
+  const endInt = Math.floor(endX);
+  for (let x = startInt; x <= endInt; x++) {
     const peakIndex = Math.floor((x / width) * state.peaks.length);
     const peak = state.peaks[peakIndex] || { max: 0, min: 0 };
-    
-    // Scale heights
     const maxH = peak.max * centerY * 0.9;
     const minH = peak.min * centerY * 0.9;
-    
-    // Determine color based on selection range
-    if (x >= startX && x <= endX) {
-      ctx.strokeStyle = 'rgba(0, 255, 136, 0.75)'; // vibrant neon green selection
-    } else {
-      ctx.strokeStyle = '#1b2a3c'; // muted dark blue-gray
-    }
-    
-    ctx.beginPath();
     ctx.moveTo(x, centerY - maxH);
     ctx.lineTo(x, centerY - minH);
-    ctx.stroke();
   }
+  ctx.stroke();
   
   // Draw Selected Highlight overlay
   ctx.fillStyle = 'rgba(0, 255, 136, 0.04)';
