@@ -239,7 +239,7 @@ const APP = {
 
   // ── Render ALL module panels ──
   renderAllModules() {
-    const container = document.getElementById('modules-list-container');
+    const container = document.getElementById('module-panels');
     if (!container) return;
     const html = MODULES_CONFIG.map(mod => this.renderModulePanel(mod)).join('');
     container.innerHTML = html;
