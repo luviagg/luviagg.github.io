@@ -276,7 +276,8 @@
             </div>
             
             <div class="graffiti-body">
-              <div class="graffiti-options-row">
+              <div id="graffiti-converter-body">
+                <div class="graffiti-options-row">
                 <div class="checkbox-option-wrap" style="margin-bottom: 16px;">
                   <label class="checkbox-label" style="cursor:pointer; display:flex; align-items:center; gap:8px;">
                     <input type="checkbox" id="point-resample" class="cfg-checkbox">
@@ -367,6 +368,79 @@
                       <li style="margin-bottom: 6px;">Borrá el archivo <code>custom.hpk</code> y cualquier <code>tempdecal.wad</code> o <code>pdecal.wad</code> viejo que encuentres ahí.</li>
                       <li style="margin-bottom: 0;">Pegá tu nuevo <code>tempdecal.wad</code> en esa carpeta, hacé click derecho $\rightarrow$ <strong>Propiedades</strong>, activá <strong>Solo Lectura</strong> y dale a Aceptar.</li>
                     </ol>
+                  </div>
+                </div>
+              </div>
+              
+              </div> <!-- /graffiti-converter-body -->
+
+              <!-- CS2 / CS:GO Graffiti Guide Body -->
+              <div id="graffiti-cs2-info-body" class="hidden">
+                <div style="background: rgba(255, 75, 75, 0.05); border: 1px solid rgba(255, 75, 75, 0.2); border-radius: 8px; padding: 16px; margin-bottom: 24px; display: flex; gap: 12px; align-items: flex-start;">
+                  <span style="font-size: 24px; line-height: 1;">⚠️</span>
+                  <div>
+                    <h4 style="font-size: 13px; font-weight: 700; color: #ff4b4b; margin-bottom: 4px;">CS2 / CS:GO no admite sprays libres</h4>
+                    <p style="font-size: 11px; color: var(--text-2); line-height: 1.5; margin: 0;">
+                      Desde la actualización de 2016, Valve bloqueó la carga local de imágenes en CS:GO/CS2. En este juego los grafitis son <strong>consumibles (cargos de 50 usos)</strong> que se compran en el mercado o caen como drops.
+                    </p>
+                  </div>
+                </div>
+
+                <h3 style="font-size: 14px; font-weight: 700; color: var(--text-1); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                  <span>🎨</span> ¿Cómo crear un Grafiti Oficial para la Steam Workshop?
+                </h3>
+
+                <div class="graffiti-info-grid" style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+                  <!-- Paso 1: Diseño -->
+                  <div class="info-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; padding: 16px;">
+                    <h4 style="font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                      <span>1️⃣</span> 1. Diseño Artístico
+                    </h4>
+                    <p style="font-size: 11px; color: var(--text-2); line-height: 1.5; margin: 0;">
+                      Crea tu ilustración en Photoshop o Illustrator en una mesa de trabajo cuadrada (ej: <code>512x512</code> o <code>1024x1024</code> px). Es obligatorio usar un fondo transparente y guardar en formato <strong>PNG de 32-bits</strong> (con canal Alpha).
+                    </p>
+                  </div>
+
+                  <!-- Paso 2: Conversión -->
+                  <div class="info-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; padding: 16px;">
+                    <h4 style="font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                      <span>2️⃣</span> 2. Convertir a Formato VTF/VMT
+                    </h4>
+                    <p style="font-size: 11px; color: var(--text-2); line-height: 1.5; margin-bottom: 10px;">
+                      Valve utiliza sus propios formatos de texturas. Necesitas convertir tu PNG a <strong>VTF (Valve Texture Format)</strong> y crear un archivo de definición material <strong>VMT (Valve Material Type)</strong> para configurar el brillo y el relieve.
+                    </p>
+                    <div style="display: flex; gap: 10px;">
+                      <a href="https://valvedev.info/tools/vtfedit/" target="_blank" class="browse-link" style="font-size: 10px; font-weight: 700; text-decoration: underline; color: var(--accent);">Descargar VTFEdit (Windows)</a>
+                    </div>
+                  </div>
+
+                  <!-- Paso 3: Tipos de grafiti -->
+                  <div class="info-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; padding: 16px;">
+                    <h4 style="font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                      <span>3️⃣</span> 3. Seleccionar el Estilo
+                    </h4>
+                    <p style="font-size: 11px; color: var(--text-2); line-height: 1.5; margin-bottom: 8px;">
+                      La Workshop te pedirá clasificar tu grafiti en uno de los tres estilos oficiales:
+                    </p>
+                    <ul style="font-size: 11px; color: var(--text-2); line-height: 1.6; padding-left: 18px; margin: 0;">
+                      <li><strong>Monocromático</strong>: Un único color plano con desgaste de superficie.</li>
+                      <li><strong>Multicolor</strong>: Múltiples colores predefinidos sin brillos.</li>
+                      <li><strong>Sellado (Tinted)</strong>: Estilo calcomanía con mapa de normales (relieve 3D) y brillo plástico.</li>
+                    </ul>
+                  </div>
+
+                  <!-- Paso 4: Publicar -->
+                  <div class="info-card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; padding: 16px;">
+                    <h4 style="font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                      <span>4️⃣</span> 4. Publicar y Ganar Dinero
+                    </h4>
+                    <p style="font-size: 11px; color: var(--text-2); line-height: 1.5; margin-bottom: 10px;">
+                      Abre CS2, ve a la consola, ejecuta la herramienta de la Workshop, carga tus archivos VTF/VMT y envíalo. Si los usuarios votan de forma positiva tu diseño y Valve lo selecciona, aparecerá oficialmente en el juego y recibirás regalías por sus ventas.
+                    </p>
+                    <div style="display: flex; gap: 12px;">
+                      <a href="https://partner.steamgames.com/doc/sdk/upload/counterstrike2" target="_blank" class="browse-link" style="font-size: 10px; font-weight: 700; text-decoration: underline; color: var(--accent);">Documentación de Workshop CS2</a>
+                      <a href="https://steamcommunity.com/workshop/browse/?appid=730" target="_blank" class="browse-link" style="font-size: 10px; font-weight: 700; text-decoration: underline; color: var(--accent);">Ver Workshop de CS2</a>
+                    </div>
                   </div>
                 </div>
               </div>

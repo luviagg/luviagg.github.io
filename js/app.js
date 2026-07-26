@@ -1374,6 +1374,7 @@ const APP = {
       
       this.updateInstallPath();
       this.drawSprayToCanvas();
+      this.updateGraffitiView();
     } else {
       if (modulePanels) modulePanels.classList.add('hidden');
       if (graffitiContentView) graffitiContentView.classList.add('hidden');
@@ -1430,6 +1431,7 @@ const APP = {
     this.renderSidebar();
     this.renderAllModules();
     this.generateAndPreview();
+    this.updateGraffitiView();
 
     const toastNames = {
       cs15: '💾 CS 1.5',
@@ -1439,6 +1441,29 @@ const APP = {
       cs2: '🔥 CS2'
     };
     showToast(`Modo de juego: ${toastNames[game] || game}`, 'info');
+  },
+
+  updateGraffitiView() {
+    const game = this.state.game || 'cs16';
+    const converterBody = document.getElementById('graffiti-converter-body');
+    const cs2InfoBody = document.getElementById('graffiti-cs2-info-body');
+    const graffitiPreviewContent = document.getElementById('graffiti-preview-content');
+
+    if (!converterBody || !cs2InfoBody) return;
+
+    if (game === 'cs2') {
+      converterBody.classList.add('hidden');
+      cs2InfoBody.classList.remove('hidden');
+      if (graffitiPreviewContent) {
+        graffitiPreviewContent.classList.add('hidden');
+      }
+    } else {
+      converterBody.classList.remove('hidden');
+      cs2InfoBody.classList.add('hidden');
+      if (this.state.activeTool === 'graffiti' && graffitiPreviewContent) {
+        graffitiPreviewContent.classList.remove('hidden');
+      }
+    }
   },
 
   toggleSidebarView(view) {
