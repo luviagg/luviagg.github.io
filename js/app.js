@@ -1461,6 +1461,7 @@ const APP = {
     const graffitiContentView = document.getElementById('graffiti-content-view');
     const placeholderContentView = document.getElementById('placeholder-content-view');
     const soundsContentView = document.getElementById('sounds-content-view');
+    const gifContentView = document.getElementById('gif-content-view');
     
     // Preview Views
     const cfgPreviewContent = document.getElementById('cfg-preview-content');
@@ -1473,6 +1474,7 @@ const APP = {
     // Reset default layout state
     if (mainWorkspace) mainWorkspace.classList.remove('preview-collapsed');
     if (soundsContentView) soundsContentView.classList.add('hidden');
+    if (gifContentView) gifContentView.classList.add('hidden');
 
     if (toolId === 'modules') {
       if (modulePanels) modulePanels.classList.remove('hidden');
@@ -1519,6 +1521,21 @@ const APP = {
       if (guiContentView) guiContentView.classList.add('hidden');
       if (placeholderContentView) placeholderContentView.classList.add('hidden');
       if (soundsContentView) soundsContentView.classList.remove('hidden');
+      
+      if (cfgPreviewContent) cfgPreviewContent.classList.add('hidden');
+      if (graffitiPreviewContent) graffitiPreviewContent.classList.add('hidden');
+      if (guiPreviewContent) guiPreviewContent.classList.add('hidden');
+      if (placeholderPreviewContent) placeholderPreviewContent.classList.add('hidden');
+      
+      if (mainWorkspace) mainWorkspace.classList.add('preview-collapsed');
+      this.updateInstallPath();
+    } else if (toolId === 'gif') {
+      if (modulePanels) modulePanels.classList.add('hidden');
+      if (graffitiContentView) graffitiContentView.classList.add('hidden');
+      if (guiContentView) guiContentView.classList.add('hidden');
+      if (placeholderContentView) placeholderContentView.classList.add('hidden');
+      if (soundsContentView) soundsContentView.classList.add('hidden');
+      if (gifContentView) gifContentView.classList.remove('hidden');
       
       if (cfgPreviewContent) cfgPreviewContent.classList.add('hidden');
       if (graffitiPreviewContent) graffitiPreviewContent.classList.add('hidden');

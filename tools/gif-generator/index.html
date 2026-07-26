@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CS GIF Maker</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- GIFShot Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gifshot/0.3.2/gifshot.min.js"></script>
+</head>
+<body>
+  <div class="gif-generator-app">
+    
+    <!-- LEFT PANEL: Frame Manager and Configurations -->
+    <div class="editor-controls-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">👾 Creador de GIFs Animados</h2>
+        <p class="panel-subtitle">Genera pequeños GIFs para chats, WhatsApp o foros del juego.</p>
+      </div>
+
+      <!-- Drop Zone for uploading frames -->
+      <div class="drop-zone" id="drop-zone">
+        <div class="drop-zone-icon">📷</div>
+        <div class="drop-zone-text">Arrastra imágenes aquí o haz clic para subirlas</div>
+        <div class="drop-zone-sub">Soporta PNG, JPG y WebP (sube varios archivos a la vez)</div>
+        <input type="file" id="image-input" multiple accept="image/*" style="display: none;">
+      </div>
+
+      <!-- Frame List / Thumbnail grid -->
+      <div class="frames-section hidden" id="frames-section">
+        <h3 class="section-title">Fotogramas (<span id="frame-count">0</span>)</h3>
+        <div class="frames-grid" id="frames-grid">
+          <!-- Dynamically populated frame thumbnails go here -->
+        </div>
+      </div>
+
+      <!-- Configurations -->
+      <div class="settings-group disabled" id="settings-group">
+        <h3 class="group-title">Ajustes del GIF</h3>
+        
+        <!-- Aspect Ratio presets -->
+        <div class="input-field">
+          <label for="aspect-preset">Relación de Aspecto</label>
+          <select id="aspect-preset">
+            <option value="square" selected>Cuadrado (1:1) - e.g. WhatsApp</option>
+            <option value="vertical">Vertical (3:4) - e.g. Celular</option>
+            <option value="horizontal">Horizontal (4:3) - e.g. Foro/Firma</option>
+            <option value="custom">Personalizado (Manual)</option>
+          </select>
+        </div>
+
+        <!-- Custom Dimensions -->
+        <div class="range-inputs" id="custom-dimensions-block">
+          <div class="input-field">
+            <label for="width-input">Ancho (px)</label>
+            <input type="number" id="width-input" min="32" max="1024" value="256" disabled>
+          </div>
+          <div class="input-field">
+            <label for="height-input">Alto (px)</label>
+            <input type="number" id="height-input" min="32" max="1024" value="256" disabled>
+          </div>
+        </div>
+
+        <!-- Image Scaling Mode -->
+        <div class="input-field">
+          <label for="scale-mode">Modo de Ajuste</label>
+          <select id="scale-mode">
+            <option value="cover" selected>Cover (Rellenar y recortar sin deformar)</option>
+            <option value="contain">Contain (Ajustar con fondo negro)</option>
+            <option value="stretch">Stretch (Estirar imagen por completo)</option>
+          </select>
+        </div>
+
+        <!-- Animation Delay -->
+        <div class="volume-control">
+          <div class="volume-header">
+            <label for="delay-range">Tiempo por fotograma</label>
+            <span id="delay-val">200ms</span>
+          </div>
+          <input type="range" id="delay-range" min="50" max="2000" step="50" value="200" class="slider">
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <button class="btn-primary-action disabled" id="btn-export">
+        <span>💾</span> GENERAR Y DESCARGAR GIF
+      </button>
+    </div>
+
+    <!-- RIGHT PANEL: Live Animation Preview -->
+    <div class="preview-panel-view">
+      <div class="preview-header">
+        <h3 class="preview-title">👁️ Vista Previa en Tiempo Real</h3>
+        <div class="status-bar">
+          <span class="status-indicator" id="status-dot"></span>
+          <span class="status-text" id="status-text">Esperando imágenes...</span>
+        </div>
+      </div>
+
+      <!-- Preview Canvas Wrapper -->
+      <div class="canvas-container">
+        <canvas id="preview-canvas"></canvas>
+      </div>
+
+      <!-- File details or guidelines -->
+      <div class="guidelines-card">
+        <div class="guide-title">💡 Consejos para optimizar tu GIF:</div>
+        <ul>
+          <li><strong>Mantén el tamaño chico:</strong> Las dimensiones entre 128px y 320px son ideales para que carguen rápido en chats.</li>
+          <li><strong>Menos fotogramas = menor peso:</strong> Intenta usar entre 3 y 15 imágenes para un rendimiento óptimo.</li>
+          <li><strong>Velocidad recomendada:</strong> Un tiempo de 100ms a 300ms por fotograma ofrece animaciones naturales.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notifications -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Javascript -->
+  <script src="generator.js"></script>
+</body>
+</html>
