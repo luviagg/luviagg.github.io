@@ -1093,9 +1093,9 @@ const APP = {
     document.getElementById('btn-download').addEventListener('click', () => this.downloadCFG());
     // Copy
     document.getElementById('btn-copy').addEventListener('click', () => this.copyCFG());
-    // Reset
-    document.getElementById('btn-reset').addEventListener('click', () => {
-      if (confirm('¿Resetear toda la configuración?')) {
+    // CFG Reset
+    document.getElementById('btn-reset-cfg').addEventListener('click', () => {
+      if (confirm('¿Resetear la configuración de módulos y binds del CFG?')) {
         this.state.modules  = {};
         this.state.keybinds = { ...DEFAULT_KEYBINDS };
         this.state.buyBinds = JSON.parse(JSON.stringify(DEFAULT_BUY_BINDS));
@@ -1104,13 +1104,61 @@ const APP = {
         this.renderAllModules();
         this.renderSidebar();
         this.generateAndPreview();
-        showToast('Configuración reseteada', 'info');
+        showToast('CFG reseteada ✓', 'info');
       }
     });
-    // Import button
-    document.getElementById('btn-import').addEventListener('click', () => {
+    // CFG Import button
+    document.getElementById('btn-import-cfg').addEventListener('click', () => {
       document.getElementById('import-modal').classList.remove('hidden');
     });
+
+    // GUI Reset
+    const btnResetGui = document.getElementById('btn-reset-gui');
+    if (btnResetGui) {
+      btnResetGui.addEventListener('click', () => {
+        if (confirm('¿Resetear los colores y fondo de pantalla del menú (GUI)?')) {
+          const accentInput = document.getElementById('gui-color-accent');
+          const windowInput = document.getElementById('gui-color-window');
+          const textInput = document.getElementById('gui-color-text');
+          const guiPresetSelect = document.getElementById('gui-preset-select');
+          
+          if (accentInput) accentInput.value = '#00ff88';
+          if (windowInput) windowInput.value = '#282020';
+          if (textInput) textInput.value = '#ffffff';
+          if (guiPresetSelect) guiPresetSelect.value = '';
+
+          this.state.guiWallpaperSrc = null;
+          const previewBox = document.getElementById('gui-menu-preview-box');
+          if (previewBox) {
+            previewBox.style.backgroundImage = 'none';
+          }
+
+          const statusBox = document.getElementById('gui-conversion-status');
+          if (statusBox) statusBox.classList.add('hidden');
+
+          const btnDownloadTgas = document.getElementById('btn-download-tgas');
+          if (btnDownloadTgas) btnDownloadTgas.setAttribute('disabled', 'true');
+
+          this.updateGuiThemeFromPickers();
+          showToast('Diseño GUI restablecido ✓', 'info');
+        }
+      });
+    }
+
+    // Spray Reset
+    const btnResetSpray = document.getElementById('btn-reset-spray');
+    if (btnResetSpray) {
+      btnResetSpray.addEventListener('click', () => {
+        if (confirm('¿Limpiar el spray cargado?')) {
+          this.drawSprayToCanvas();
+          const statusBox = document.getElementById('conversion-status');
+          if (statusBox) statusBox.classList.add('hidden');
+          const btnDownloadWad = document.getElementById('btn-download-wad');
+          if (btnDownloadWad) btnDownloadWad.setAttribute('disabled', 'true');
+          showToast('Spray limpiado ✓', 'info');
+        }
+      });
+    }
     document.getElementById('import-close').addEventListener('click', () => {
       document.getElementById('import-modal').classList.add('hidden');
     });
