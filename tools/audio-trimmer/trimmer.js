@@ -403,6 +403,23 @@ function drawTimeline() {
 // ── 3. CANVAS INTERACTION (MOUSE DRAGGING) ──
 
 if (el.canvas) {
+  // Click on timeline ruler to navigate and play immediately
+  if (el.timelineRuler) {
+    el.timelineRuler.addEventListener('click', (e) => {
+      if (!state.audioBuffer) return;
+      
+      const rect = el.timelineRuler.getBoundingClientRect();
+      const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+      const width = rect.width;
+      const clickTime = (x / width) * state.duration;
+      
+      // Set playhead and start playing immediately
+      state.playOffset = clickTime;
+      state.playhead = clickTime;
+      startPlayback();
+    });
+  }
+
   el.canvas.addEventListener('mousedown', (e) => {
     if (!state.audioBuffer) return;
     
@@ -420,10 +437,15 @@ if (el.canvas) {
     } else if (Math.abs(x - endX) < 12) {
       state.isDraggingEnd = true;
     } else {
-      // Start a fresh selection click-and-drag
+      // Anchor for click-to-play vs drag-to-select
       state.isSelecting = true;
-      state.startTime = clickTime;
-      state.endTime = clickTime;
+      state.clickX = x;
+      state.tempSelectionStart = clickTime;
+      state.hasMovedSelection = false;
+      
+      // Store current selection in case we click-to-play (so we can restore it)
+      state.prevStartTime = state.startTime;
+      state.prevEndTime = state.endTime;
     }
   });
 
@@ -439,29 +461,53 @@ if (el.canvas) {
     if (state.isDraggingStart) {
       state.startTime = Math.min(hoverTime, state.endTime - 0.05); // margin of 50ms
       el.startInput.value = state.startTime.toFixed(2);
+      updateDurationDisplay();
+      drawWaveform();
     } else if (state.isDraggingEnd) {
       state.endTime = Math.max(hoverTime, state.startTime + 0.05);
       el.endInput.value = state.endTime.toFixed(2);
+      updateDurationDisplay();
+      drawWaveform();
     } else if (state.isSelecting) {
-      const clickTime = hoverTime;
-      if (clickTime < state.startTime) {
-        state.endTime = state.startTime;
-        state.startTime = clickTime;
-        state.isSelecting = false;
-        state.isDraggingStart = true; // pivot to dragging start
-      } else {
-        state.endTime = clickTime;
+      // Check threshold (drag vs simple click)
+      if (Math.abs(x - state.clickX) > 6) {
+        state.hasMovedSelection = true;
+      }
+      
+      if (state.hasMovedSelection) {
+        // Drag-to-select: update start and end times dynamically
+        state.startTime = Math.min(state.tempSelectionStart, hoverTime);
+        state.endTime = Math.max(state.tempSelectionStart, hoverTime);
+        
+        // Keep spacing of at least 50ms
+        if (state.endTime - state.startTime < 0.05) {
+          state.endTime = state.startTime + 0.05;
+        }
+        
+        el.startInput.value = state.startTime.toFixed(2);
+        el.endInput.value = state.endTime.toFixed(2);
+        updateDurationDisplay();
+        drawWaveform();
       }
     }
-    
-    updateDurationDisplay();
-    drawWaveform();
   });
 
   window.addEventListener('mouseup', () => {
+    if (state.isSelecting) {
+      if (!state.hasMovedSelection) {
+        // It was a simple click: restore selection range and start playing from click point!
+        state.startTime = state.prevStartTime;
+        state.endTime = state.prevEndTime;
+        
+        // Set playhead and start playing
+        state.playOffset = state.tempSelectionStart;
+        state.playhead = state.tempSelectionStart;
+        startPlayback();
+      }
+      state.isSelecting = false;
+    }
     state.isDraggingStart = false;
     state.isDraggingEnd = false;
-    state.isSelecting = false;
   });
 }
 
