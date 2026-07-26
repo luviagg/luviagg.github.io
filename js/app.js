@@ -1305,7 +1305,7 @@ const APP = {
       });
     }
 
-    ['graffiti', 'wallpaper', 'sounds', 'hud'].forEach(id => {
+    ['graffiti', 'wallpaper', 'sounds', 'hud', 'gif'].forEach(id => {
       const btn = document.getElementById(`btn-collapse-${id}`);
       if (btn) {
         btn.addEventListener('click', () => {
