@@ -1372,6 +1372,39 @@ const APP = {
         this.toggleSidebarView('default');
       });
     }
+
+    // Disclaimer modal show handlers
+    const openDisclaimer = () => {
+      const modal = document.getElementById('disclaimer-modal');
+      if (modal) modal.classList.remove('hidden');
+    };
+    const closeDisclaimer = () => {
+      const modal = document.getElementById('disclaimer-modal');
+      if (modal) modal.classList.add('hidden');
+    };
+
+    const luviaProfileCard = document.getElementById('luvia-profile-card');
+    if (luviaProfileCard) {
+      luviaProfileCard.addEventListener('click', openDisclaimer);
+    }
+
+    const btnShowDisclaimer = document.getElementById('btn-show-disclaimer');
+    if (btnShowDisclaimer) {
+      btnShowDisclaimer.addEventListener('click', (e) => {
+        e.preventDefault();
+        openDisclaimer();
+      });
+    }
+
+    // Disclaimer modal close handlers
+    const disclaimerClose = document.getElementById('disclaimer-close');
+    if (disclaimerClose) disclaimerClose.addEventListener('click', closeDisclaimer);
+
+    const disclaimerBackdrop = document.getElementById('disclaimer-backdrop');
+    if (disclaimerBackdrop) disclaimerBackdrop.addEventListener('click', closeDisclaimer);
+
+    const disclaimerAccept = document.getElementById('disclaimer-accept');
+    if (disclaimerAccept) disclaimerAccept.addEventListener('click', closeDisclaimer);
   },
 
   selectTool(toolId) {
