@@ -135,6 +135,19 @@ function decodeAudio(arrayBuffer) {
   
   state.audioCtx.decodeAudioData(arrayBuffer)
     .then(decodedBuffer => {
+      // Limit to 5 minutes max
+      if (decodedBuffer.duration > 300) {
+        showToast('⚠️ El audio supera el límite permitido de 5 minutos.', 'error');
+        updateStatus('Archivo demasiado largo', 'unfilled');
+        el.audioInput.value = '';
+        state.audioBuffer = null;
+        el.fileInfoCard.classList.add('hidden');
+        el.settingsGroup.classList.add('disabled');
+        el.playbackGroup.classList.add('disabled');
+        el.btnExport.classList.add('disabled');
+        return;
+      }
+
       state.audioBuffer = decodedBuffer;
       state.duration = decodedBuffer.duration;
       state.startTime = 0;
@@ -690,11 +703,27 @@ if (el.btnExport) {
     // Stop playback first
     stopPlayback();
     
-    updateStatus('Procesando audio...', 'active');
-    showToast('Recortando y preparando audio para descarga...', 'info');
+    const baseName = state.fileName.substring(0, state.fileName.lastIndexOf('.')) || state.fileName;
+    const trimmedFilename = `${baseName}_recortado.wav`;
     
-    // Set a slight timeout so UI updates before CPU blocks on trimming
-    setTimeout(trimAndExportAudio, 50);
+    // Route download action through the parent's ad-wall modal
+    if (window.parent && window.parent.APP && typeof window.parent.APP.triggerAdAndDownload === 'function') {
+      window.parent.APP.triggerAdAndDownload(
+        trimmedFilename,
+        'Archivo de audio recortado en formato WAV (16-bit PCM) listo para colocar en cstrike/sound/.',
+        () => {
+          updateStatus('Procesando audio...', 'active');
+          showToast('Recortando y preparando audio para descarga...', 'info');
+          setTimeout(trimAndExportAudio, 50);
+        },
+        false // isCopy = false
+      );
+    } else {
+      // Fallback fallback if loaded outside iframe
+      updateStatus('Procesando audio...', 'active');
+      showToast('Recortando y preparando audio para descarga...', 'info');
+      setTimeout(trimAndExportAudio, 50);
+    }
   });
 }
 
