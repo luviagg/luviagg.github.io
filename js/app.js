@@ -239,7 +239,7 @@ const APP = {
 
   // ── Render ALL module panels ──
   renderAllModules() {
-    const container = document.getElementById('module-panels');
+    const container = document.getElementById('modules-list-container');
     if (!container) return;
     const html = MODULES_CONFIG.map(mod => this.renderModulePanel(mod)).join('');
     container.innerHTML = html;
@@ -1537,6 +1537,49 @@ const APP = {
     const accentInput = document.getElementById('gui-color-accent');
     const windowInput = document.getElementById('gui-color-window');
     const textInput = document.getElementById('gui-color-text');
+
+    const GUI_PRESETS = {
+      matrix: { name: '💚 Matrix (Predeterminado)', accent: '#00ff88', window: '#151c18', text: '#ffffff' },
+      classic: { name: '🟫 Classic GoldSrc (Marrón Clásico)', accent: '#ffb300', window: '#3e3830', text: '#ffffff' },
+      cyberpunk: { name: '💛 Cyberpunk 2077', accent: '#fcee0a', window: '#0a0b0d', text: '#00f0ff' },
+      blood: { name: '❤️ Blood Red (Rojo Sangre)', accent: '#ff2a2a', window: '#1a0f0f', text: '#ffffff' },
+      deepblue: { name: '💙 Deep Space Blue', accent: '#00d2ff', window: '#0a0e17', text: '#ffffff' },
+      carbon: { name: '🖤 Carbon Black (Todo Oscuro)', accent: '#e0e0e0', window: '#121212', text: '#ffffff' },
+      navy: { name: '👔 CS:GO Navy Blue', accent: '#4b69ff', window: '#1a2233', text: '#ffffff' },
+      asimov: { name: '🍊 Asimov (Naranja y Blanco)', accent: '#ff6a00', window: '#202022', text: '#ffffff' },
+      retrowave: { name: '🔮 Retrowave (Púrpura Neon)', accent: '#ff007f', window: '#130022', text: '#00ffff' },
+      ice: { name: '❄️ Tundra Ice (Celeste Hielo)', accent: '#a5f3fc', window: '#0f172a', text: '#f1f5f9' },
+      military: { name: '🪖 Military Green (Verde Militar)', accent: '#84cc16', window: '#1f2937', text: '#f3f4f6' },
+      gold: { name: '👑 Gold Luxury (Oro Premium)', accent: '#fbbf24', window: '#1c1917', text: '#fafaf9' },
+      vampire: { name: '🧛 Vampire (Púrpura y Rojo)', accent: '#8b5cf6', window: '#180b18', text: '#ffffff' },
+      solarized: { name: '☀️ Solarized Orange', accent: '#f97316', window: '#27272a', text: '#f4f4f5' },
+      aqua: { name: '🌊 Aqua Splash', accent: '#06b6d4', window: '#0b1a20', text: '#e0f2fe' },
+      lime: { name: '🍋 Acid Lime', accent: '#a3e635', window: '#0f170a', text: '#ffffff' },
+      hyperbeast: { name: '🦄 Hyper Beast (Colores Locos)', accent: '#ec4899', window: '#1e1b4b', text: '#22d3ee' },
+      stealth: { name: '👻 Stealth Ghost (Gris Fantasma)', accent: '#94a3b8', window: '#1e293b', text: '#f1f5f9' },
+      desert: { name: '🏜️ Desert Storm (Arena)', accent: '#d97706', window: '#292524', text: '#f5f5f4' },
+      toxic: { name: '☣️ Toxic Waste (Amarillo Ácido)', accent: '#d9f99d', window: '#141517', text: '#ffffff' }
+    };
+
+    const guiPresetSelect = document.getElementById('gui-preset-select');
+    if (guiPresetSelect) {
+      guiPresetSelect.innerHTML = '<option value="">— Cargar Preset de Colores —</option>' + 
+        Object.keys(GUI_PRESETS).map(key => {
+          return `<option value="${key}">${GUI_PRESETS[key].name}</option>`;
+        }).join('');
+        
+      guiPresetSelect.addEventListener('change', (e) => {
+        const val = e.target.value;
+        if (val && GUI_PRESETS[val]) {
+          const preset = GUI_PRESETS[val];
+          if (accentInput) accentInput.value = preset.accent;
+          if (windowInput) windowInput.value = preset.window;
+          if (textInput) textInput.value = preset.text;
+          this.updateGuiThemeFromPickers();
+          showToast(`Tema cargado: ${preset.name.split(' ').slice(1).join(' ')}`, 'success');
+        }
+      });
+    }
 
     if (accentInput) accentInput.addEventListener('input', () => this.updateGuiThemeFromPickers());
     if (windowInput) windowInput.addEventListener('input', () => this.updateGuiThemeFromPickers());

@@ -108,18 +108,6 @@
       </div>
 
       <div class="header-right">
-        <div class="preset-wrap">
-          <label class="preset-label">Preset</label>
-          <select id="preset-select" class="preset-select">
-            <option value="">— Cargar Preset —</option>
-            <option value="blank">📄 Desde Cero</option>
-            <option value="competitive">⚔️ Competitivo Estándar</option>
-            <option value="awp">🎯 Pro AWP</option>
-            <option value="cafe">☕ Café Internet / LAN</option>
-            <option value="performance">⚡ Máximo Rendimiento</option>
-            <option value="quality">✨ Máxima Calidad</option>
-          </select>
-        </div>
         <!-- Controles de Diseño Modular (Skins/IDE) -->
         <div class="layout-controls">
           <button class="layout-btn" id="btn-toggle-orientation" onclick="APP.toggleLayoutOrientation()" title="Cambiar Orientación (Columnas / Filas)">
@@ -265,7 +253,27 @@
         <main id="content-area">
           <!-- CFG Builder Content View -->
           <div id="module-panels">
-            <!-- Rendered by JS -->
+            <div class="cfg-preset-header-wrap" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 12px;">
+              <div>
+                <h2 class="section-title">Editor de Módulos CFG</h2>
+                <p class="section-subtitle">Configura cada apartado del juego seleccionando opciones competitivas.</p>
+              </div>
+              <div class="preset-wrap" style="margin-left: auto;">
+                <label class="preset-label">Cargar Preset</label>
+                <select id="preset-select" class="preset-select">
+                  <option value="">— Cargar Preset —</option>
+                  <option value="blank">📄 Desde Cero</option>
+                  <option value="competitive">⚔️ Competitivo Estándar</option>
+                  <option value="awp">🎯 Pro AWP</option>
+                  <option value="cafe">☕ Café Internet / LAN</option>
+                  <option value="performance">⚡ Máximo Rendimiento</option>
+                  <option value="quality">✨ Máxima Calidad</option>
+                </select>
+              </div>
+            </div>
+            <div id="modules-list-container">
+              <!-- Rendered by JS -->
+            </div>
           </div>
           
           <!-- Graffiti Tool Content View -->
@@ -460,6 +468,14 @@
               <div id="gui-game-warning" style="background: rgba(255, 179, 0, 0.05); border: 1px solid rgba(255, 179, 0, 0.2); border-radius: 8px; padding: 12px; margin-bottom: 20px; display: flex; gap: 10px; align-items: center; font-size: 11px; color: #ffb300;">
                 <span>⚠️</span>
                 <span>Nota: Esta personalización está optimizada para juegos de motor GoldSrc (CS 1.6, Condition Zero, Half-Life).</span>
+              </div>
+
+              <!-- GUI Preset Selector -->
+              <div class="preset-wrap" style="margin-bottom: 24px; max-width: 100%;">
+                <label class="preset-label" style="display: block; margin-bottom: 8px;">Presets de Colores GUI</label>
+                <select id="gui-preset-select" class="preset-select" style="width: 100%; box-sizing: border-box;">
+                  <option value="">— Cargar Preset de Colores —</option>
+                </select>
               </div>
 
               <!-- Color Palette Editor -->
