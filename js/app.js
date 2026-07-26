@@ -2646,12 +2646,6 @@ const APP = {
       if (modalTitleEl) modalTitleEl.textContent = 'Preparando copia de archivo';
       if (fileCard) fileCard.classList.add('hidden');
       if (copyWrap) copyWrap.classList.remove('hidden');
-      
-      // Draw copy preview canvas
-      if (copyCanvas) {
-        const lines = this.generateCFG();
-        this.drawCFGToCanvas(copyCanvas, lines);
-      }
     } else {
       if (modalTitleEl) modalTitleEl.textContent = 'Preparando descarga';
       if (fileCard) fileCard.classList.remove('hidden');
@@ -2745,6 +2739,12 @@ const APP = {
     // Show modal
     modal.classList.remove('hidden');
 
+    // Draw copy preview canvas AFTER showing modal to ensure correct clientWidth
+    if (isCopy && copyCanvas) {
+      const lines = this.generateCFG();
+      this.drawCFGToCanvas(copyCanvas, lines);
+    }
+
     // Start countdown and progress animation
     let elapsed = 0;
     const duration = 10000; // 10 seconds
@@ -2830,7 +2830,7 @@ const APP = {
     ctx.font = font;
     
     // Calculate width & height
-    const width = canvas.parentElement ? canvas.parentElement.clientWidth : 750;
+    const width = (canvas.parentElement && canvas.parentElement.clientWidth > 0) ? canvas.parentElement.clientWidth : 800;
     const height = lines.length * lineHeight + paddingTop * 2;
     
     // Scale canvas for high DPI displays (retina)
