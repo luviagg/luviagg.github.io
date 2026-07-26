@@ -253,27 +253,7 @@
         <main id="content-area">
           <!-- CFG Builder Content View -->
           <div id="module-panels">
-            <div class="cfg-preset-header-wrap" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 12px;">
-              <div>
-                <h2 class="section-title">Editor de Módulos CFG</h2>
-                <p class="section-subtitle">Configura cada apartado del juego seleccionando opciones competitivas.</p>
-              </div>
-              <div class="preset-wrap" style="margin-left: auto;">
-                <label class="preset-label">Cargar Preset</label>
-                <select id="preset-select" class="preset-select">
-                  <option value="">— Cargar Preset —</option>
-                  <option value="blank">📄 Desde Cero</option>
-                  <option value="competitive">⚔️ Competitivo Estándar</option>
-                  <option value="awp">🎯 Pro AWP</option>
-                  <option value="cafe">☕ Café Internet / LAN</option>
-                  <option value="performance">⚡ Máximo Rendimiento</option>
-                  <option value="quality">✨ Máxima Calidad</option>
-                </select>
-              </div>
-            </div>
-            <div id="modules-list-container">
-              <!-- Rendered by JS -->
-            </div>
+            <!-- Rendered by JS -->
           </div>
           
           <!-- Graffiti Tool Content View -->
@@ -470,13 +450,7 @@
                 <span>Nota: Esta personalización está optimizada para juegos de motor GoldSrc (CS 1.6, Condition Zero, Half-Life).</span>
               </div>
 
-              <!-- GUI Preset Selector -->
-              <div class="preset-wrap" style="margin-bottom: 24px; max-width: 100%;">
-                <label class="preset-label" style="display: block; margin-bottom: 8px;">Presets de Colores GUI</label>
-                <select id="gui-preset-select" class="preset-select" style="width: 100%; box-sizing: border-box;">
-                  <option value="">— Cargar Preset de Colores —</option>
-                </select>
-              </div>
+
 
               <!-- Color Palette Editor -->
               <h3 style="font-size: 14px; font-weight: 700; color: var(--text-1); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
@@ -565,6 +539,19 @@
               </div>
             </div>
 
+            <div class="preview-presets-bar" style="padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 8px; background: rgba(0, 0, 0, 0.15);">
+              <span style="font-size: 11px; font-weight: 700; color: var(--text-2); white-space: nowrap;">⚡ Cargar Preset:</span>
+              <select id="preset-select" class="preset-select" style="flex: 1; max-width: 180px; padding: 4px 8px; font-size: 11px; height: auto;">
+                <option value="">— Seleccionar —</option>
+                <option value="blank">📄 Desde Cero</option>
+                <option value="competitive">⚔️ Competitivo Estándar</option>
+                <option value="awp">🎯 Pro AWP</option>
+                <option value="cafe">☕ Café Internet / LAN</option>
+                <option value="performance">⚡ Máximo Rendimiento</option>
+                <option value="quality">✨ Máxima Calidad</option>
+              </select>
+            </div>
+
             <div class="preview-actions">
               <button id="btn-download" class="btn-primary">
                 <svg viewBox="0 0 20 20" fill="none"><path d="M10 3v10M6 9l4 4 4-4M4 14v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -649,6 +636,13 @@
                 <svg viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4V4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                 Vista Previa de Interfaz (GUI)
               </div>
+            </div>
+
+            <div class="preview-presets-bar" style="padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 8px; background: rgba(0, 0, 0, 0.15);">
+              <span style="font-size: 11px; font-weight: 700; color: var(--text-2); white-space: nowrap;">⚡ Tema Predefinido:</span>
+              <select id="gui-preset-select" class="preset-select" style="flex: 1; max-width: 180px; padding: 4px 8px; font-size: 11px; height: auto;">
+                <option value="">— Seleccionar —</option>
+              </select>
             </div>
             
             <div style="padding: 16px;">
