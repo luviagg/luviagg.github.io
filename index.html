@@ -573,9 +573,8 @@
               <span>Esta CFG funciona en conjunto con: <b id="tandem-cfg-name">otra_cfg.cfg</b></span>
             </div>
 
-            <div class="preview-code-wrap">
-              <pre id="cfg-preview"><code id="cfg-code">// Tu CFG aparecerá aquí en tiempo real
-  // Activa los módulos y configura cada opción</code></pre>
+            <div class="preview-code-wrap" style="position: relative;">
+              <canvas id="cfg-preview-canvas" style="display: block; user-select: none; -webkit-user-select: none;"></canvas>
             </div>
 
             <div class="preview-instructions">
@@ -845,12 +844,17 @@
         </div>
 
         <!-- File Details Card -->
-        <div class="file-details-card" style="width: 100%; text-align: left; padding: 12px 16px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; gap: 12px;">
+        <div class="file-details-card" id="download-file-card" style="width: 100%; text-align: left; padding: 12px 16px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; gap: 12px;">
           <div id="download-file-icon" style="font-size: 24px; min-width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(0, 255, 136, 0.05); border: 1px solid rgba(0, 255, 136, 0.15); border-radius: 6px; color: var(--accent);">📄</div>
           <div style="flex: 1; min-width: 0;">
             <div id="download-file-name" style="font-family: var(--font-head); font-weight: 700; color: var(--text-1); font-size: 13px; word-break: break-all; margin-bottom: 2px;">archivo.cfg</div>
             <div id="download-file-desc" style="font-size: 11px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Configuración del cliente de CS 1.6</div>
           </div>
+        </div>
+
+        <!-- Code Preview Card (for copy modal) -->
+        <div id="copy-code-preview-wrap" class="hidden" style="width: 100%; max-height: 180px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; background: #0a0f16; text-align: left;">
+          <canvas id="copy-preview-canvas" style="display: block; user-select: none; -webkit-user-select: none;"></canvas>
         </div>
 
         <!-- Generator preparation status / Progress block -->

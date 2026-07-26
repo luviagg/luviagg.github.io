@@ -623,8 +623,10 @@ const APP = {
     _previewDebounceTimer = setTimeout(() => {
       const lines = this.generateCFG();
       const raw   = lines.join('\n');
-      const codeEl = document.getElementById('cfg-code');
-      if (codeEl) codeEl.innerHTML = syntaxHighlight(raw);
+      const canvas = document.getElementById('cfg-preview-canvas');
+      if (canvas) {
+        this.drawCFGToCanvas(canvas, lines);
+      }
 
       const statLines = document.getElementById('stat-lines');
       if (statLines) statLines.textContent = `${lines.length} líneas`;
@@ -1097,7 +1099,10 @@ const APP = {
       this.triggerAdAndDownload(fname, 'Configuración de consola personalizada para CS 1.6', () => this.downloadCFG());
     });
     // Copy
-    document.getElementById('btn-copy').addEventListener('click', () => this.copyCFG());
+    document.getElementById('btn-copy').addEventListener('click', () => {
+      const fname = (this.state.filename || 'config') + '.cfg';
+      this.triggerAdAndDownload(fname, 'Configuración de consola personalizada para CS 1.6', () => this.copyCFG(), true);
+    });
     // CFG Reset
     document.getElementById('btn-reset-cfg').addEventListener('click', () => {
       if (confirm('¿Resetear la configuración de módulos y binds del CFG?')) {
@@ -2615,8 +2620,9 @@ const APP = {
   },
 
   // ── Ad Wall and Progress Control ──
-  triggerAdAndDownload(filename, description, downloadCallback) {
+  triggerAdAndDownload(filename, description, downloadCallback, isCopy = false) {
     const modal = document.getElementById('download-ad-modal');
+    const modalTitleEl = document.getElementById('download-ad-title');
     const fileNameEl = document.getElementById('download-file-name');
     const fileDescEl = document.getElementById('download-file-desc');
     const fileIconEl = document.getElementById('download-file-icon');
@@ -2627,8 +2633,30 @@ const APP = {
     const actionSection = document.getElementById('download-ad-action-section');
     const adsGridEl = document.getElementById('simulated-ads-grid');
     const confirmBtn = document.getElementById('download-ad-confirm');
+    
+    // Copy specific elements
+    const fileCard = document.getElementById('download-file-card');
+    const copyWrap = document.getElementById('copy-code-preview-wrap');
+    const copyCanvas = document.getElementById('copy-preview-canvas');
 
     if (!modal) return;
+
+    // Toggle copy specific views
+    if (isCopy) {
+      if (modalTitleEl) modalTitleEl.textContent = 'Preparando copia de archivo';
+      if (fileCard) fileCard.classList.add('hidden');
+      if (copyWrap) copyWrap.classList.remove('hidden');
+      
+      // Draw copy preview canvas
+      if (copyCanvas) {
+        const lines = this.generateCFG();
+        this.drawCFGToCanvas(copyCanvas, lines);
+      }
+    } else {
+      if (modalTitleEl) modalTitleEl.textContent = 'Preparando descarga';
+      if (fileCard) fileCard.classList.remove('hidden');
+      if (copyWrap) copyWrap.classList.add('hidden');
+    }
 
     // Set file details
     if (fileNameEl) fileNameEl.textContent = filename;
@@ -2739,7 +2767,7 @@ const APP = {
           statusTextEl.textContent = 'Conectando de forma segura...';
         } else if (pct < 40) {
           if (filename.endsWith('.cfg')) {
-            statusTextEl.textContent = 'Procesando comandos de consola y cvars...';
+            statusTextEl.textContent = isCopy ? 'Procesando comandos de consola para copia...' : 'Procesando comandos de consola y cvars...';
           } else if (filename.endsWith('.wad')) {
             statusTextEl.textContent = 'Escalando imagen al motor gráfico GoldSrc...';
           } else {
@@ -2747,7 +2775,7 @@ const APP = {
           }
         } else if (pct < 60) {
           if (filename.endsWith('.cfg')) {
-            statusTextEl.textContent = 'Escribiendo binds de teclado personalizados...';
+            statusTextEl.textContent = isCopy ? 'Compilando binds y alias...' : 'Escribiendo binds de teclado personalizados...';
           } else if (filename.endsWith('.wad')) {
             statusTextEl.textContent = 'Creando paleta de 256 colores para WAD3...';
           } else {
@@ -2756,9 +2784,9 @@ const APP = {
         } else if (pct < 80) {
           statusTextEl.textContent = 'Verificando firma binaria para protección VAC...';
         } else if (pct < 100) {
-          statusTextEl.textContent = '¡Finalizando empaquetado del archivo!';
+          statusTextEl.textContent = '¡Finalizando procesamiento del archivo!';
         } else {
-          statusTextEl.textContent = '¡Archivo listo para descargar!';
+          statusTextEl.textContent = isCopy ? '¡CFG lista para copiar!' : '¡Archivo listo para descargar!';
         }
       }
 
@@ -2774,6 +2802,10 @@ const APP = {
 
     // Setup action handler
     if (confirmBtn) {
+      confirmBtn.innerHTML = isCopy 
+        ? '<span>📋</span> ¡COPIAR AL PORTAPAPELES!'
+        : '<span>💾</span> ¡DESCARGAR AHORA!';
+
       const newConfirmBtn = confirmBtn.cloneNode(true);
       confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
 
@@ -2782,6 +2814,95 @@ const APP = {
         modal.classList.add('hidden');
       });
     }
+  },
+
+  // ── Draw CFG code directly onto Canvas ──
+  drawCFGToCanvas(canvas, lines) {
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const lineHeight = 18;
+    const paddingLeft = 12;
+    const paddingTop = 12;
+    
+    // Font properties
+    const font = "12px 'JetBrains Mono', Consolas, 'Courier New', monospace";
+    ctx.font = font;
+    
+    // Calculate width & height
+    const width = canvas.parentElement ? canvas.parentElement.clientWidth : 750;
+    const height = lines.length * lineHeight + paddingTop * 2;
+    
+    // Scale canvas for high DPI displays (retina)
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    ctx.scale(dpr, dpr);
+    
+    // Set font again after scaling
+    ctx.font = font;
+    ctx.textBaseline = 'top';
+    
+    // Draw background
+    ctx.fillStyle = '#0a0f16'; // Dark background matching the editor
+    ctx.fillRect(0, 0, width, height);
+    
+    // Color configuration
+    const colors = {
+      comment: '#637287',
+      bind: '#00ff88',
+      keyword: '#ff00ff',
+      string: '#ff9d00',
+      text: '#ffffff'
+    };
+    
+    lines.forEach((line, index) => {
+      const y = paddingTop + index * lineHeight;
+      const trimmed = line.trim();
+      
+      if (trimmed.startsWith('//')) {
+        // Entire comment
+        ctx.fillStyle = colors.comment;
+        ctx.fillText(line, paddingLeft, y);
+      } else {
+        // Draw syntax highlighted segments
+        let x = paddingLeft;
+        
+        // Simple parser for quoted strings, comments, and words
+        const regex = /(\/\/.*)|("([^"]*)")|([^\s"]+)|(\s+)/g;
+        let match;
+        
+        while ((match = regex.exec(line)) !== null) {
+          const text = match[0];
+          if (match[1]) {
+            // Comment segment
+            ctx.fillStyle = colors.comment;
+            ctx.fillText(text, x, y);
+          } else if (match[2]) {
+            // Quoted string segment
+            ctx.fillStyle = colors.string;
+            ctx.fillText(text, x, y);
+          } else if (match[4]) {
+            // Word segment
+            const word = match[4];
+            if (word === 'bind' || word === 'unbind' || word === 'alias') {
+              ctx.fillStyle = colors.bind;
+            } else if (word === 'sensitivity' || word === 'cl_crosshair_color' || word === 'cl_crosshair_size') {
+              ctx.fillStyle = colors.keyword;
+            } else {
+              ctx.fillStyle = colors.text;
+            }
+            ctx.fillText(text, x, y);
+          } else {
+            // Whitespace segment
+            ctx.fillStyle = colors.text;
+            ctx.fillText(text, x, y);
+          }
+          x += ctx.measureText(text).width;
+        }
+      }
+    });
   },
 };
 
