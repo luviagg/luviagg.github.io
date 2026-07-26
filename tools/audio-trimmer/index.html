@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CS Audio Trimmer</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="audio-trimmer-app">
+    
+    <!-- LEFT PANEL: Configuration and Controls -->
+    <div class="editor-controls-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">🔊 Personalizador de Audio</h2>
+        <p class="panel-subtitle">Recorta y ajusta audios del juego 100% en tu navegador.</p>
+      </div>
+
+      <!-- Upload Zone -->
+      <div class="upload-zone" id="drop-zone">
+        <div class="upload-icon">🎵</div>
+        <div class="upload-text">Arrastra tu archivo de audio aquí o haz clic para examinar</div>
+        <div class="upload-info">Admite MP3, WAV, OGG, M4A, etc.</div>
+        <input type="file" id="audio-input" accept="audio/*" class="hidden">
+      </div>
+
+      <!-- File Details (Hidden initially) -->
+      <div class="file-details hidden" id="file-info-card">
+        <div class="details-row">
+          <span class="detail-label">Archivo:</span>
+          <span class="detail-val text-ellipsis" id="info-name">-</span>
+        </div>
+        <div class="details-row">
+          <span class="detail-label">Duración:</span>
+          <span class="detail-val" id="info-duration">0.00s</span>
+        </div>
+        <div class="details-row">
+          <span class="detail-label">Canales:</span>
+          <span class="detail-val" id="info-channels">-</span>
+        </div>
+      </div>
+
+      <!-- Trimmer Settings -->
+      <div class="settings-group disabled" id="settings-group">
+        <h3 class="group-title">Ajustes de Selección</h3>
+        
+        <!-- Range Inputs -->
+        <div class="range-inputs">
+          <div class="input-field">
+            <label for="start-input">Inicio (seg)</label>
+            <input type="number" id="start-input" min="0" step="0.01" value="0.00">
+          </div>
+          <div class="input-field">
+            <label for="end-input">Fin (seg)</label>
+            <input type="number" id="end-input" min="0" step="0.01" value="0.00">
+          </div>
+        </div>
+
+        <div class="duration-display">
+          <span>Duración seleccionada:</span>
+          <strong id="selected-duration">0.00s</strong>
+        </div>
+
+        <!-- Volume Controller -->
+        <div class="volume-control">
+          <div class="volume-header">
+            <label for="volume-range">Volumen de Exportación</label>
+            <span id="volume-val">100%</span>
+          </div>
+          <input type="range" id="volume-range" min="0" max="200" value="100" class="slider">
+        </div>
+
+        <!-- Audio Effects -->
+        <div class="effects-row">
+          <label class="checkbox-container">
+            <input type="checkbox" id="chk-fadein">
+            <span class="checkmark"></span>
+            Fade-in (0.5s)
+          </label>
+          <label class="checkbox-container">
+            <input type="checkbox" id="chk-fadeout">
+            <span class="checkmark"></span>
+            Fade-out (0.5s)
+          </label>
+        </div>
+      </div>
+
+      <!-- Playback Controls -->
+      <div class="playback-controls disabled" id="playback-group">
+        <button class="control-btn" id="btn-play" title="Reproducir selección">▶ Reproducir</button>
+        <button class="control-btn" id="btn-pause" title="Pausar reproducción">⏸ Pausar</button>
+        <button class="control-btn" id="btn-stop" title="Detener">⏹ Detener</button>
+      </div>
+
+      <!-- Action Button -->
+      <button class="btn-primary-action disabled" id="btn-export">
+        <span>💾</span> RECORTAR Y DESCARGAR WAV
+      </button>
+    </div>
+
+    <!-- RIGHT PANEL: Waveform Visualizer -->
+    <div class="waveform-panel">
+      <div class="waveform-header">
+        <span class="visualizer-label">📊 Visualizador de Onda</span>
+        <span class="visualizer-tips">Arrastra las barras verticales verdes/rojas para seleccionar</span>
+      </div>
+      
+      <div class="waveform-container">
+        <!-- Canvas Waveform -->
+        <canvas id="waveform-canvas"></canvas>
+        
+        <!-- Timeline Ruler -->
+        <div class="timeline-ruler" id="timeline-ruler">
+          <!-- Marks generated dynamically by JS -->
+        </div>
+      </div>
+      
+      <!-- Live playhead tracking info -->
+      <div class="playback-status">
+        <span class="status-indicator" id="status-dot"></span>
+        <span class="status-text" id="status-text">Listo para cargar audio...</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast Notification Wrapper -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Sound Trimmer Logic -->
+  <script src="trimmer.js"></script>
+</body>
+</html>
