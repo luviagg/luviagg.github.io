@@ -166,6 +166,7 @@ const APP = {
 
     this.generateAndPreview();
     this.initCrosshairCanvas();
+    this.attachGuiEvents();
     setTimeout(() => this.animatePanelsIn(), 100);
 
     if (hadSavedState) showToast('Sesión anterior restaurada ✓', 'success');
@@ -1353,35 +1354,57 @@ const APP = {
     const graffitiPreviewContent = document.getElementById('graffiti-preview-content');
     const placeholderPreviewContent = document.getElementById('placeholder-preview-content');
     
+    const guiContentView = document.getElementById('gui-content-view');
+    const guiPreviewContent = document.getElementById('gui-preview-content');
+
     if (toolId === 'modules') {
       if (modulePanels) modulePanels.classList.remove('hidden');
       if (graffitiContentView) graffitiContentView.classList.add('hidden');
+      if (guiContentView) guiContentView.classList.add('hidden');
       if (placeholderContentView) placeholderContentView.classList.add('hidden');
       
       if (cfgPreviewContent) cfgPreviewContent.classList.remove('hidden');
       if (graffitiPreviewContent) graffitiPreviewContent.classList.add('hidden');
+      if (guiPreviewContent) guiPreviewContent.classList.add('hidden');
       if (placeholderPreviewContent) placeholderPreviewContent.classList.add('hidden');
       
       this.updateInstallPath();
     } else if (toolId === 'graffiti') {
       if (modulePanels) modulePanels.classList.add('hidden');
       if (graffitiContentView) graffitiContentView.classList.remove('hidden');
+      if (guiContentView) guiContentView.classList.add('hidden');
       if (placeholderContentView) placeholderContentView.classList.add('hidden');
       
       if (cfgPreviewContent) cfgPreviewContent.classList.add('hidden');
       if (graffitiPreviewContent) graffitiPreviewContent.classList.remove('hidden');
+      if (guiPreviewContent) guiPreviewContent.classList.add('hidden');
       if (placeholderPreviewContent) placeholderPreviewContent.classList.add('hidden');
       
       this.updateInstallPath();
       this.drawSprayToCanvas();
       this.updateGraffitiView();
+    } else if (toolId === 'wallpaper') {
+      if (modulePanels) modulePanels.classList.add('hidden');
+      if (graffitiContentView) graffitiContentView.classList.add('hidden');
+      if (guiContentView) guiContentView.classList.remove('hidden');
+      if (placeholderContentView) placeholderContentView.classList.add('hidden');
+      
+      if (cfgPreviewContent) cfgPreviewContent.classList.add('hidden');
+      if (graffitiPreviewContent) graffitiPreviewContent.classList.add('hidden');
+      if (guiPreviewContent) guiPreviewContent.classList.remove('hidden');
+      if (placeholderPreviewContent) placeholderPreviewContent.classList.add('hidden');
+      
+      this.updateInstallPath();
+      this.updateGuiThemeFromPickers();
     } else {
       if (modulePanels) modulePanels.classList.add('hidden');
       if (graffitiContentView) graffitiContentView.classList.add('hidden');
+      if (guiContentView) guiContentView.classList.add('hidden');
       if (placeholderContentView) placeholderContentView.classList.remove('hidden');
       
       if (cfgPreviewContent) cfgPreviewContent.classList.add('hidden');
       if (graffitiPreviewContent) graffitiPreviewContent.classList.add('hidden');
+      if (guiPreviewContent) guiPreviewContent.classList.add('hidden');
       if (placeholderPreviewContent) placeholderPreviewContent.classList.remove('hidden');
       
       const pTitle = document.getElementById('placeholder-title');
@@ -1389,7 +1412,6 @@ const APP = {
       const pDesc = document.getElementById('placeholder-desc');
       
       const toolDetails = {
-        wallpaper: { title: 'GUI Customizer', icon: '🖼️', desc: 'Carga, recorta y edita imágenes para fondos de menús del juego y splash screens personalizados.' },
         sounds: { title: 'Sounds / Packs', icon: '🔊', desc: 'Compila y personaliza paquetes de audio para el juego seleccionado (voces, sonidos competitivos).' },
         hud: { title: 'HUB Customizer', icon: '📺', desc: 'Personaliza completamente el radar, color de vida y escala del HUD del juego.' }
       };
@@ -1464,6 +1486,278 @@ const APP = {
         graffitiPreviewContent.classList.remove('hidden');
       }
     }
+  },
+
+  updateGuiThemeFromPickers() {
+    const accent = document.getElementById('gui-color-accent')?.value || '#00ff88';
+    const windowColor = document.getElementById('gui-color-window')?.value || '#282020';
+    const textColor = document.getElementById('gui-color-text')?.value || '#ffffff';
+
+    const dialogBox = document.getElementById('gui-dialog-box');
+    const accentLink = document.getElementById('gui-preview-link-accent');
+    const closeBtn = document.getElementById('gui-close-btn');
+
+    if (dialogBox) {
+      dialogBox.style.background = windowColor;
+      dialogBox.style.borderColor = accent;
+      dialogBox.style.color = textColor;
+    }
+
+    if (accentLink) {
+      accentLink.style.color = accent;
+    }
+
+    if (closeBtn) {
+      closeBtn.style.color = accent;
+    }
+
+    // Update highlights inside the dialog
+    document.querySelectorAll('.gui-preview-dialog-row.active').forEach(el => {
+      el.style.backgroundColor = accent + '33'; // ~20% opacity
+    });
+
+    document.querySelectorAll('.gui-preview-btn').forEach(btn => {
+      btn.style.borderColor = accent;
+      btn.style.color = textColor;
+    });
+
+    // Update warning visibility if it's CS2/CS:GO
+    const game = this.state.game || 'cs16';
+    const warning = document.getElementById('gui-game-warning');
+    if (warning) {
+      if (game === 'cs2' || game === 'css') {
+        warning.style.display = 'flex';
+      } else {
+        warning.style.display = 'none';
+      }
+    }
+  },
+
+  attachGuiEvents() {
+    const accentInput = document.getElementById('gui-color-accent');
+    const windowInput = document.getElementById('gui-color-window');
+    const textInput = document.getElementById('gui-color-text');
+
+    if (accentInput) accentInput.addEventListener('input', () => this.updateGuiThemeFromPickers());
+    if (windowInput) windowInput.addEventListener('input', () => this.updateGuiThemeFromPickers());
+    if (textInput) textInput.addEventListener('input', () => this.updateGuiThemeFromPickers());
+
+    // Download TrackerScheme.res
+    const btnDownloadScheme = document.getElementById('btn-download-scheme');
+    if (btnDownloadScheme) {
+      btnDownloadScheme.addEventListener('click', () => {
+        const accent = document.getElementById('gui-color-accent')?.value || '#00ff88';
+        const windowColor = document.getElementById('gui-color-window')?.value || '#282020';
+        const textColor = document.getElementById('gui-color-text')?.value || '#ffffff';
+
+        const hexToRgbaStr = (hex) => {
+          let r = parseInt(hex.slice(1, 3), 16);
+          let g = parseInt(hex.slice(3, 5), 16);
+          let b = parseInt(hex.slice(5, 7), 16);
+          return `${r} ${g} ${b} 255`;
+        };
+
+        const accentRgb = hexToRgbaStr(accent);
+        const windowRgb = hexToRgbaStr(windowColor);
+        const textRgb = hexToRgbaStr(textColor);
+
+        const schemeText = `Scheme
+{
+	Colors
+	{
+		"BorderBright"			"${accentRgb}"
+		"BorderDark"			"40 40 40 255"
+		"BorderSelection"		"${accentRgb}"
+		"MenuBG"				"${windowRgb}"
+		"MenuText"				"${textRgb}"
+		"MenuTextSelected"		"${accentRgb}"
+		"MenuTextSelectedBG"	"0 0 0 0"
+		"WindowBG"				"${windowRgb}"
+		"ButtonBG"				"0 0 0 128"
+		"ButtonText"			"${textRgb}"
+		"ButtonTextSelected"	"${accentRgb}"
+	}
+}`;
+
+        const blob = new Blob([schemeText], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'TrackerScheme.res';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('TrackerScheme.res descargado ✓', 'success');
+      });
+    }
+
+    // Drag and Drop events for GUI Wallpaper
+    const dropArea = document.getElementById('gui-drop-area');
+    const fileInput = document.getElementById('gui-file-input');
+
+    if (dropArea && fileInput) {
+      dropArea.addEventListener('click', () => fileInput.click());
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          dropArea.classList.add('highlight');
+        }, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          dropArea.classList.remove('highlight');
+        }, false);
+      });
+
+      dropArea.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files.length > 0) {
+          this.handleGuiWallpaperSelect(files[0]);
+        }
+      }, false);
+
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          this.handleGuiWallpaperSelect(e.target.files[0]);
+        }
+      });
+    }
+
+    // Download Sliced TGAs ZIP
+    const btnDownloadTgas = document.getElementById('btn-download-tgas');
+    if (btnDownloadTgas) {
+      btnDownloadTgas.addEventListener('click', () => {
+        if (!this.state.guiWallpaperSrc) return;
+        
+        if (typeof JSZip === 'undefined') {
+          showToast('Cargando compresor ZIP...', 'info');
+          const script = document.createElement('script');
+          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+          script.onload = () => {
+            this.generateAndDownloadTgaZip();
+          };
+          script.onerror = () => {
+            showToast('Error cargando JSZip. Verifica tu conexión a internet.', 'error');
+          };
+          document.head.appendChild(script);
+        } else {
+          this.generateAndDownloadTgaZip();
+        }
+      });
+    }
+  },
+
+  handleGuiWallpaperSelect(file) {
+    if (!file.type.startsWith('image/')) {
+      showToast('Por favor, selecciona un archivo de imagen válido', 'error');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const dataUrl = e.target.result;
+      this.state.guiWallpaperSrc = dataUrl;
+
+      const previewBox = document.getElementById('gui-menu-preview-box');
+      if (previewBox) {
+        previewBox.style.backgroundImage = `url(${dataUrl})`;
+      }
+
+      const statusBox = document.getElementById('gui-conversion-status');
+      const statusText = document.getElementById('gui-conversion-status-text');
+      if (statusBox && statusText) {
+        statusBox.classList.remove('hidden');
+        statusText.textContent = `Imagen "${file.name}" cargada correctamente`;
+      }
+
+      const btnDownloadTgas = document.getElementById('btn-download-tgas');
+      if (btnDownloadTgas) {
+        btnDownloadTgas.removeAttribute('disabled');
+      }
+
+      showToast('Fondo de menú cargado ✓', 'success');
+    };
+    reader.readAsDataURL(file);
+  },
+
+  generateAndDownloadTgaZip() {
+    if (!this.state.guiWallpaperSrc) return;
+    showToast('Procesando mosaico de fondos...', 'info');
+
+    const img = new Image();
+    img.onload = () => {
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = 1024;
+      tempCanvas.height = 768;
+      const tempCtx = tempCanvas.getContext('2d');
+      tempCtx.drawImage(img, 0, 0, 1024, 768);
+
+      const zip = new JSZip();
+      const cols = 4;
+      const rows = 3;
+      const colNames = ['a', 'b', 'c', 'd'];
+      
+      const sliceCanvas = document.createElement('canvas');
+      sliceCanvas.width = 256;
+      sliceCanvas.height = 256;
+      const sliceCtx = sliceCanvas.getContext('2d');
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          sliceCtx.clearRect(0, 0, 256, 256);
+          sliceCtx.drawImage(tempCanvas, c * 256, r * 256, 256, 256, 0, 0, 256, 256);
+          const imgData = sliceCtx.getImageData(0, 0, 256, 256);
+          const tgaBuffer = this.createTgaBuffer(256, 256, imgData.data);
+          const filename = `1024_${r + 1}_${colNames[c]}.tga`;
+          zip.file(`resource/background/${filename}`, tgaBuffer);
+        }
+      }
+
+      zip.generateAsync({ type: 'blob' }).then((content) => {
+        const url = URL.createObjectURL(content);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'cs_16_sliced_wallpaper.zip';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('¡Fondo slicado (ZIP) descargado!', 'success');
+      }).catch((err) => {
+        console.error(err);
+        showToast('Error generando archivo ZIP', 'error');
+      });
+    };
+    img.src = this.state.guiWallpaperSrc;
+  },
+
+  createTgaBuffer(width, height, pixelData) {
+    const header = new Uint8Array(18);
+    header[2] = 2; // Uncompressed true-color
+    header[12] = width & 0xFF;
+    header[13] = (width >> 8) & 0xFF;
+    header[14] = height & 0xFF;
+    header[15] = (height >> 8) & 0xFF;
+    header[16] = 24; // 24 bits depth
+    header[17] = 0x20; // Top-left origin descriptor
+    
+    const bgrData = new Uint8Array(width * height * 3);
+    let bgrIdx = 0;
+    for (let i = 0; i < pixelData.length; i += 4) {
+      bgrData[bgrIdx++] = pixelData[i + 2]; // B
+      bgrData[bgrIdx++] = pixelData[i + 1]; // G
+      bgrData[bgrIdx++] = pixelData[i];     // R
+    }
+    
+    const buffer = new Uint8Array(header.length + bgrData.length);
+    buffer.set(header, 0);
+    buffer.set(bgrData, header.length);
+    return buffer;
   },
 
   toggleSidebarView(view) {

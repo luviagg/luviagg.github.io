@@ -448,7 +448,71 @@
           </div>
               
 
-          
+          <!-- GUI Tool Content View -->
+          <div id="gui-content-view" class="hidden">
+            <div class="graffiti-header">
+              <h2 class="section-title">Personalización del Menú (GUI)</h2>
+              <p class="section-subtitle">Ajustá los colores del menú y cargá tu propio fondo de pantalla para hacerlos combinar.</p>
+            </div>
+            
+            <div class="graffiti-body">
+              <!-- Warning for non-GoldSrc games -->
+              <div id="gui-game-warning" style="background: rgba(255, 179, 0, 0.05); border: 1px solid rgba(255, 179, 0, 0.2); border-radius: 8px; padding: 12px; margin-bottom: 20px; display: flex; gap: 10px; align-items: center; font-size: 11px; color: #ffb300;">
+                <span>⚠️</span>
+                <span>Nota: Esta personalización está optimizada para juegos de motor GoldSrc (CS 1.6, Condition Zero, Half-Life).</span>
+              </div>
+
+              <!-- Color Palette Editor -->
+              <h3 style="font-size: 14px; font-weight: 700; color: var(--text-1); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                <span>🎨</span> Paleta de Colores del Menú (TrackerScheme.res)
+              </h3>
+              
+              <div class="gui-color-grid">
+                <div class="gui-color-picker-wrap">
+                  <span class="gui-color-label">Color de Acento</span>
+                  <input type="color" id="gui-color-accent" class="gui-color-picker" value="#00ff88">
+                </div>
+                <div class="gui-color-picker-wrap">
+                  <span class="gui-color-label">Fondo de Ventana</span>
+                  <input type="color" id="gui-color-window" class="gui-color-picker" value="#282020">
+                </div>
+                <div class="gui-color-picker-wrap">
+                  <span class="gui-color-label">Color de Texto</span>
+                  <input type="color" id="gui-color-text" class="gui-color-picker" value="#ffffff">
+                </div>
+              </div>
+
+              <div style="margin-bottom: 32px;">
+                <button id="btn-download-scheme" class="btn-primary" style="width: 100%; justify-content: center;">
+                  💾 Descargar TrackerScheme.res
+                </button>
+              </div>
+
+              <!-- Wallpaper Slicer -->
+              <h3 style="font-size: 14px; font-weight: 700; color: var(--text-1); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                <span>🖼️</span> Fondo del Menú Principal (Mosaico TGA)
+              </h3>
+              
+              <div class="drag-drop-area" id="gui-drop-area">
+                <div class="drag-drop-icon">📷</div>
+                <div class="drag-drop-text">Arrastra tu fondo de pantalla aquí o <span class="browse-link">buscala en tu PC</span></div>
+                <div class="drag-drop-sub">Se cortará automáticamente en 12 piezas de 256x256 px en formato TGA.</div>
+                <input type="file" id="gui-file-input" accept="image/*" class="hidden">
+              </div>
+
+              <div class="conversion-status-box hidden" id="gui-conversion-status" style="margin-top: 16px;">
+                <span id="gui-conversion-status-icon">✓</span>
+                <span id="gui-conversion-status-text">Fondo listo para procesar</span>
+              </div>
+
+              <div style="margin-top: 20px;">
+                <button id="btn-download-tgas" class="btn-secondary" disabled style="width: 100%; justify-content: center;">
+                  📦 Descargar Fondo Slicado (ZIP)
+                </button>
+              </div>
+            </div>
+          </div>
+
           <!-- Other Tools Placeholder Content View -->
           <div id="placeholder-content-view" class="hidden">
             <div class="placeholder-tool-wrap">
@@ -557,6 +621,62 @@
                   1. Descargá el archivo <b>tempdecal.wad</b>.<br>
                   2. Guardalo en la carpeta indicada.<br>
                   3. <b>Importante:</b> Dale click derecho al archivo descargado, selecciona Propiedades y marca <b>"Solo lectura"</b> para evitar que el juego lo sobrescriba.
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- GUI Preview View -->
+          <div id="gui-preview-content" class="hidden">
+            <div class="preview-header">
+              <div class="preview-title">
+                <svg viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4V4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                Vista Previa de Interfaz (GUI)
+              </div>
+            </div>
+            
+            <div style="padding: 16px;">
+              <div class="gui-preview-menu" id="gui-menu-preview-box">
+                <!-- Classic CS 1.6 links on left -->
+                <div class="gui-preview-left">
+                  <div class="gui-preview-link" id="gui-preview-link-accent" style="color: #00ff88;">Find Servers</div>
+                  <div class="gui-preview-link">Create Server</div>
+                  <div class="gui-preview-link">Options</div>
+                  <div class="gui-preview-link">Quit</div>
+                </div>
+                
+                <!-- Mock Server Browser Dialog in center -->
+                <div class="gui-preview-dialog-wrap">
+                  <div class="gui-preview-dialog" id="gui-dialog-box" style="background: #282020; border-color: #00ff88; color: #ffffff;">
+                    <div class="gui-preview-dialog-header">
+                      <span>Servers</span>
+                      <span id="gui-close-btn" style="color: #00ff88; font-weight: 900; cursor: pointer;">X</span>
+                    </div>
+                    <div class="gui-preview-dialog-body">
+                      <div class="gui-preview-dialog-row active" style="background: rgba(0, 255, 136, 0.15);"></div>
+                      <div class="gui-preview-dialog-row"></div>
+                      <div class="gui-preview-dialog-row"></div>
+                      <div class="gui-preview-dialog-row"></div>
+                    </div>
+                    <div class="gui-preview-dialog-footer">
+                      <button class="gui-preview-btn" style="border-color: #00ff88; color: #ffffff;">Connect</button>
+                      <button class="gui-preview-btn" style="border-color: #00ff88; color: #ffffff;">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="preview-instructions">
+              <div class="install-steps">
+                <div class="install-title">📁 Cómo instalar la GUI</div>
+                <div class="install-path" id="gui-install-path">
+                  <span class="path-label">Steam:</span>
+                  <code>Steam/steamapps/common/Half-Life/cstrike/resource/</code>
+                </div>
+                <div class="install-cmd">
+                  1. Descargá y copia <b>TrackerScheme.res</b> en la carpeta <code>resource</code>.<br>
+                  2. Descargá el <b>Fondo Slicado (ZIP)</b>, descomprimí las 12 imágenes <code>.tga</code> y pegalas dentro de la carpeta <code>resource/background</code>.
                 </div>
               </div>
             </div>
