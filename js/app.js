@@ -1092,7 +1092,10 @@ const APP = {
       this.loadPreset(e.target.value);
     });
     // Download
-    document.getElementById('btn-download').addEventListener('click', () => this.downloadCFG());
+    document.getElementById('btn-download').addEventListener('click', () => {
+      const fname = (this.state.filename || 'config') + '.cfg';
+      this.triggerAdAndDownload(fname, 'Configuración de consola personalizada para CS 1.6', () => this.downloadCFG());
+    });
     // Copy
     document.getElementById('btn-copy').addEventListener('click', () => this.copyCFG());
     // CFG Reset
@@ -1356,7 +1359,7 @@ const APP = {
 
     if (sprayDownloadWadBtn) {
       sprayDownloadWadBtn.addEventListener('click', () => {
-        this.downloadWadFile();
+        this.triggerAdAndDownload('tempdecal.wad', 'Grafiti customizado para CS 1.6', () => this.downloadWadFile());
       });
     }
 
@@ -1407,6 +1410,26 @@ const APP = {
 
     const disclaimerAccept = document.getElementById('disclaimer-accept');
     if (disclaimerAccept) disclaimerAccept.addEventListener('click', closeDisclaimer);
+
+    // Download Ad Modal close handlers
+    const closeAdModal = () => {
+      const modal = document.getElementById('download-ad-modal');
+      if (modal) modal.classList.add('hidden');
+      if (this.adInterval) {
+        clearInterval(this.adInterval);
+        this.adInterval = null;
+      }
+    };
+    const adClose = document.getElementById('download-ad-close');
+    if (adClose) adClose.addEventListener('click', () => {
+      closeAdModal();
+      showToast('Descarga cancelada', 'info');
+    });
+    const adBackdrop = document.getElementById('download-ad-backdrop');
+    if (adBackdrop) adBackdrop.addEventListener('click', () => {
+      closeAdModal();
+      showToast('Descarga cancelada', 'info');
+    });
   },
 
   selectTool(toolId) {
@@ -1672,49 +1695,7 @@ const APP = {
     const btnDownloadScheme = document.getElementById('btn-download-scheme');
     if (btnDownloadScheme) {
       btnDownloadScheme.addEventListener('click', () => {
-        const accent = document.getElementById('gui-color-accent')?.value || '#00ff88';
-        const windowColor = document.getElementById('gui-color-window')?.value || '#282020';
-        const textColor = document.getElementById('gui-color-text')?.value || '#ffffff';
-
-        const hexToRgbaStr = (hex) => {
-          let r = parseInt(hex.slice(1, 3), 16);
-          let g = parseInt(hex.slice(3, 5), 16);
-          let b = parseInt(hex.slice(5, 7), 16);
-          return `${r} ${g} ${b} 255`;
-        };
-
-        const accentRgb = hexToRgbaStr(accent);
-        const windowRgb = hexToRgbaStr(windowColor);
-        const textRgb = hexToRgbaStr(textColor);
-
-        const schemeText = `Scheme
-{
-	Colors
-	{
-		"BorderBright"			"${accentRgb}"
-		"BorderDark"			"40 40 40 255"
-		"BorderSelection"		"${accentRgb}"
-		"MenuBG"				"${windowRgb}"
-		"MenuText"				"${textRgb}"
-		"MenuTextSelected"		"${accentRgb}"
-		"MenuTextSelectedBG"	"0 0 0 0"
-		"WindowBG"				"${windowRgb}"
-		"ButtonBG"				"0 0 0 128"
-		"ButtonText"			"${textRgb}"
-		"ButtonTextSelected"	"${accentRgb}"
-	}
-}`;
-
-        const blob = new Blob([schemeText], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'TrackerScheme.res';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showToast('TrackerScheme.res descargado ✓', 'success');
+        this.triggerAdAndDownload('TrackerScheme.res', 'Personalización de colores del menú', () => this.downloadSchemeFile());
       });
     }
 
@@ -1759,21 +1740,7 @@ const APP = {
     if (btnDownloadTgas) {
       btnDownloadTgas.addEventListener('click', () => {
         if (!this.state.guiWallpaperSrc) return;
-        
-        if (typeof JSZip === 'undefined') {
-          showToast('Cargando compresor ZIP...', 'info');
-          const script = document.createElement('script');
-          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
-          script.onload = () => {
-            this.generateAndDownloadTgaZip();
-          };
-          script.onerror = () => {
-            showToast('Error cargando JSZip. Verifica tu conexión a internet.', 'error');
-          };
-          document.head.appendChild(script);
-        } else {
-          this.generateAndDownloadTgaZip();
-        }
+        this.triggerAdAndDownload('cs_16_sliced_wallpaper.zip', 'Fondo de pantalla mosaico TGA (12 piezas)', () => this.downloadTgaZipFile());
       });
     }
   },
@@ -2579,6 +2546,242 @@ const APP = {
     a.click();
     URL.revokeObjectURL(url);
     showToast('Archivo tempdecal.wad descargado', 'success');
+  },
+
+  // ── Download TrackerScheme.res ──
+  downloadSchemeFile() {
+    const accent = document.getElementById('gui-color-accent')?.value || '#00ff88';
+    const windowColor = document.getElementById('gui-color-window')?.value || '#282020';
+    const textColor = document.getElementById('gui-color-text')?.value || '#ffffff';
+
+    const hexToRgbaStr = (hex) => {
+      let r = parseInt(hex.slice(1, 3), 16);
+      let g = parseInt(hex.slice(3, 5), 16);
+      let b = parseInt(hex.slice(5, 7), 16);
+      return `${r} ${g} ${b} 255`;
+    };
+
+    const accentRgb = hexToRgbaStr(accent);
+    const windowRgb = hexToRgbaStr(windowColor);
+    const textRgb = hexToRgbaStr(textColor);
+
+    const schemeText = `Scheme
+{
+	Colors
+	{
+		"BorderBright"			"${accentRgb}"
+		"BorderDark"			"40 40 40 255"
+		"BorderSelection"		"${accentRgb}"
+		"MenuBG"				"${windowRgb}"
+		"MenuText"				"${textRgb}"
+		"MenuTextSelected"		"${accentRgb}"
+		"MenuTextSelectedBG"	"0 0 0 0"
+		"WindowBG"				"${windowRgb}"
+		"ButtonBG"				"0 0 0 128"
+		"ButtonText"			"${textRgb}"
+		"ButtonTextSelected"	"${accentRgb}"
+	}
+}`;
+
+    const blob = new Blob([schemeText], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'TrackerScheme.res';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('TrackerScheme.res descargado ✓', 'success');
+  },
+
+  // ── Helper to Download TGA ZIP ──
+  downloadTgaZipFile() {
+    if (!this.state.guiWallpaperSrc) return;
+    if (typeof JSZip === 'undefined') {
+      showToast('Cargando compresor ZIP...', 'info');
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+      script.onload = () => {
+        this.generateAndDownloadTgaZip();
+      };
+      script.onerror = () => {
+        showToast('Error cargando JSZip. Verifica tu conexión a internet.', 'error');
+      };
+      document.head.appendChild(script);
+    } else {
+      this.generateAndDownloadTgaZip();
+    }
+  },
+
+  // ── Ad Wall and Progress Control ──
+  triggerAdAndDownload(filename, description, downloadCallback) {
+    const modal = document.getElementById('download-ad-modal');
+    const fileNameEl = document.getElementById('download-file-name');
+    const fileDescEl = document.getElementById('download-file-desc');
+    const fileIconEl = document.getElementById('download-file-icon');
+    const statusTextEl = document.getElementById('download-ad-status-text');
+    const countdownTextEl = document.getElementById('download-ad-countdown-text');
+    const progressBarEl = document.getElementById('download-ad-progress');
+    const loaderSection = document.getElementById('download-ad-loader-section');
+    const actionSection = document.getElementById('download-ad-action-section');
+    const adsGridEl = document.getElementById('simulated-ads-grid');
+    const confirmBtn = document.getElementById('download-ad-confirm');
+
+    if (!modal) return;
+
+    // Set file details
+    if (fileNameEl) fileNameEl.textContent = filename;
+    if (fileDescEl) fileDescEl.textContent = description;
+
+    // Determine icon
+    let icon = '💾';
+    if (filename.endsWith('.cfg')) icon = '📄';
+    else if (filename.endsWith('.wad')) icon = '🎨';
+    else if (filename.endsWith('.res')) icon = '⚙️';
+    else if (filename.endsWith('.zip')) icon = '📦';
+    if (fileIconEl) fileIconEl.textContent = icon;
+
+    // Set simulated ads grid content
+    if (adsGridEl) {
+      adsGridEl.innerHTML = `
+        <div class="simulated-ad-card" id="ad-server-card">
+          <div class="ad-badge">Publicidad</div>
+          <div class="ad-content">
+            <div class="ad-card-cs-server">
+              <h4 class="ad-main-text">🏆 SERVIDORES CS 1.6 🏆</h4>
+              <p class="ad-sub-text">Ping bajo y anti-cheat. IP: <b>cs.luvia.gg:27015</b> (Click para copiar)</p>
+              <button class="ad-action-btn">Copiar IP</button>
+            </div>
+          </div>
+        </div>
+        <div class="simulated-ad-card" id="ad-skins-card">
+          <div class="ad-badge">Publicidad</div>
+          <div class="ad-content">
+            <div class="ad-card-skins-loot">
+              <h4 class="ad-main-text">🎁 SKINS DIARIAS 🎁</h4>
+              <p class="ad-sub-text">Reclama tu tirada gratis de skins de CS:GO/CS2 hoy.</p>
+              <button class="ad-action-btn">Reclamar</button>
+            </div>
+          </div>
+        </div>
+        <div class="simulated-ad-card" id="ad-fps-card">
+          <div class="ad-badge">Publicidad</div>
+          <div class="ad-content">
+            <div class="ad-card-fps-booster">
+              <h4 class="ad-main-text">🚀 FPS OPTIMIZER 🚀</h4>
+              <p class="ad-sub-text">Optimiza los rates y estabiliza tus FPS en 100 estables.</p>
+              <button class="ad-action-btn">Optimizar</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Setup click listeners for each card
+      const serverCard = adsGridEl.querySelector('#ad-server-card');
+      if (serverCard) {
+        serverCard.addEventListener('click', (e) => {
+          e.preventDefault();
+          navigator.clipboard.writeText('cs.luvia.gg:27015').then(() => {
+            showToast('✅ IP copiada: cs.luvia.gg:27015. ¡Añádela a favoritos!', 'success');
+          });
+        });
+      }
+
+      const skinsCard = adsGridEl.querySelector('#ad-skins-card');
+      if (skinsCard) {
+        skinsCard.addEventListener('click', (e) => {
+          e.preventDefault();
+          showToast('🔗 Abriendo sorteo de skins (simulado)...', 'info');
+          window.open('https://store.steampowered.com/app/10/CounterStrike/', '_blank');
+        });
+      }
+
+      const fpsCard = adsGridEl.querySelector('#ad-fps-card');
+      if (fpsCard) {
+        fpsCard.addEventListener('click', (e) => {
+          e.preventDefault();
+          showToast('🔗 Abriendo optimizador FPS (simulado)...', 'info');
+          window.open('https://github.com/luviagg/luviagg.github.io', '_blank');
+        });
+      }
+    }
+
+    // Reset UI state
+    if (loaderSection) loaderSection.classList.remove('hidden');
+    if (actionSection) actionSection.classList.add('hidden');
+    if (progressBarEl) progressBarEl.style.width = '0%';
+    if (statusTextEl) statusTextEl.textContent = 'Conectando con el servidor de descargas...';
+    if (countdownTextEl) countdownTextEl.textContent = '10s';
+
+    // Show modal
+    modal.classList.remove('hidden');
+
+    // Start countdown and progress animation
+    let elapsed = 0;
+    const duration = 10000; // 10 seconds
+    const intervalTime = 100; // updates every 100ms
+    
+    if (this.adInterval) clearInterval(this.adInterval);
+
+    this.adInterval = setInterval(() => {
+      elapsed += intervalTime;
+      const pct = Math.min((elapsed / duration) * 100, 100);
+      
+      if (progressBarEl) progressBarEl.style.width = `${pct}%`;
+      
+      const secondsLeft = Math.ceil((duration - elapsed) / 1000);
+      if (countdownTextEl) countdownTextEl.textContent = `${Math.max(secondsLeft, 0)}s`;
+
+      // Update status text based on progress
+      if (statusTextEl) {
+        if (pct < 20) {
+          statusTextEl.textContent = 'Conectando de forma segura...';
+        } else if (pct < 40) {
+          if (filename.endsWith('.cfg')) {
+            statusTextEl.textContent = 'Procesando comandos de consola y cvars...';
+          } else if (filename.endsWith('.wad')) {
+            statusTextEl.textContent = 'Escalando imagen al motor gráfico GoldSrc...';
+          } else {
+            statusTextEl.textContent = 'Generando estructura de archivos...';
+          }
+        } else if (pct < 60) {
+          if (filename.endsWith('.cfg')) {
+            statusTextEl.textContent = 'Escribiendo binds de teclado personalizados...';
+          } else if (filename.endsWith('.wad')) {
+            statusTextEl.textContent = 'Creando paleta de 256 colores para WAD3...';
+          } else {
+            statusTextEl.textContent = 'Optimizando pesos y empaquetado...';
+          }
+        } else if (pct < 80) {
+          statusTextEl.textContent = 'Verificando firma binaria para protección VAC...';
+        } else if (pct < 100) {
+          statusTextEl.textContent = '¡Finalizando empaquetado del archivo!';
+        } else {
+          statusTextEl.textContent = '¡Archivo listo para descargar!';
+        }
+      }
+
+      if (elapsed >= duration) {
+        clearInterval(this.adInterval);
+        this.adInterval = null;
+        
+        // Switch views to show final download button
+        if (loaderSection) loaderSection.classList.add('hidden');
+        if (actionSection) actionSection.classList.remove('hidden');
+      }
+    }, intervalTime);
+
+    // Setup action handler
+    if (confirmBtn) {
+      const newConfirmBtn = confirmBtn.cloneNode(true);
+      confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+
+      newConfirmBtn.addEventListener('click', () => {
+        downloadCallback();
+        modal.classList.add('hidden');
+      });
+    }
   },
 };
 

@@ -2826,6 +2826,201 @@ body.theme-matrix-code {
 #gui-preview-content {
   flex: 1;
   display: flex;
+  font-weight: 700;
+}
+
+/* Placeholder Tools UI */
+.placeholder-tool-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 40px;
+  color: var(--text-3);
+}
+.placeholder-tool-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.2));
+}
+.placeholder-tool-desc {
+  font-size: 11px;
+  max-width: 320px;
+  line-height: 1.5;
+  margin-top: 12px;
+}
+
+.placeholder-preview-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 300px;
+  color: var(--text-3);
+}
+.placeholder-preview-mock {
+  width: 140px;
+  height: 140px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  letter-spacing: 2px;
+  background: rgba(0,0,0,0.1);
+  margin-bottom: 16px;
+}
+.placeholder-preview-note {
+  font-size: 10px;
+  max-width: 200px;
+}
+
+/* GUI Customizer UI */
+.gui-color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.gui-color-picker-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid var(--border);
+  padding: 12px;
+  border-radius: 6px;
+}
+.gui-color-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.gui-color-picker {
+  width: 100%;
+  height: 32px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.gui-preview-menu {
+  width: 100%;
+  height: 250px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background-color: #100f0f;
+  background-size: cover;
+  background-position: center;
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+  display: flex;
+  align-items: stretch;
+}
+
+.gui-preview-left {
+  width: 130px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+  border-right: 1px solid rgba(255,255,255,0.05);
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 5;
+}
+
+.gui-preview-link {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  opacity: 0.8;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  text-shadow: 1px 1px 2px #000;
+}
+
+.gui-preview-link:hover {
+  opacity: 1;
+  padding-left: 4px;
+}
+
+.gui-preview-dialog-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 5;
+}
+
+.gui-preview-dialog {
+  width: 180px;
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 8px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gui-preview-dialog-header {
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.gui-preview-dialog-body {
+  height: 60px;
+  border: 1px solid rgba(255,255,255,0.05);
+  background: rgba(0,0,0,0.25);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px;
+  overflow: hidden;
+}
+
+.gui-preview-dialog-row {
+  height: 8px;
+  border-radius: 1px;
+  background: rgba(255,255,255,0.05);
+}
+.gui-preview-dialog-row.active {
+  background: rgba(0, 255, 136, 0.2);
+}
+
+.gui-preview-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.gui-preview-btn {
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-size: 8px;
+  border: 1px solid;
+  background: rgba(255,255,255,0.05);
+}
+#cfg-preview-content,
+#graffiti-preview-content,
+#gui-preview-content {
+  flex: 1;
+  display: flex;
   flex-direction: column;
   height: 100%;
   overflow: hidden;
@@ -2837,4 +3032,253 @@ body.theme-matrix-code {
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
+}
+
+/* ── Download Ad Modal Styles ── */
+.simulated-ad-card {
+  width: 100%;
+  height: 160px;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.simulated-ad-card:hover {
+  border-color: rgba(0, 255, 136, 0.5);
+  box-shadow: inset 0 0 10px rgba(0, 255, 136, 0.1), 0 4px 12px rgba(0, 0, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+.simulated-ad-card:active {
+  transform: translateY(1px);
+}
+
+.simulated-ad-card .ad-badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  font-size: 8px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  padding: 1px 5px;
+  background: rgba(10, 15, 22, 0.85);
+  text-transform: uppercase;
+  font-family: var(--font-head);
+  z-index: 5;
+  letter-spacing: 0.5px;
+}
+
+.simulated-ad-card .ad-content {
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ad Template: CS 1.6 Server Promotion */
+.ad-card-cs-server {
+  background: linear-gradient(135deg, #1a1005 0%, #381f02 100%);
+  border-top: 4px solid #ff9d00;
+  width: 100%;
+  height: 100%;
+  padding: 24px 16px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.ad-card-cs-server .ad-main-text {
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+  text-shadow: 0 0 8px rgba(255, 157, 0, 0.3);
+}
+
+.ad-card-cs-server .ad-sub-text {
+  font-size: 10.5px;
+  color: #c9b199;
+  margin: 8px 0;
+  font-family: var(--font-main);
+  line-height: 1.4;
+}
+
+.ad-card-cs-server .ad-action-btn {
+  background: #ff9d00;
+  color: #0c0803;
+  border: none;
+  padding: 8px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-family: var(--font-head);
+  box-shadow: 0 4px 10px rgba(255, 157, 0, 0.2);
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.simulated-ad-card:hover .ad-card-cs-server .ad-action-btn {
+  background: #ffb433;
+  box-shadow: 0 4px 15px rgba(255, 157, 0, 0.4);
+}
+
+/* Ad Template: Free Skins Jackpot */
+.ad-card-skins-loot {
+  background: linear-gradient(135deg, #18051e 0%, #3a0b46 100%);
+  border-top: 4px solid #d900d9;
+  width: 100%;
+  height: 100%;
+  padding: 24px 16px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.ad-card-skins-loot .ad-main-text {
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+  text-shadow: 0 0 8px rgba(217, 0, 217, 0.4);
+}
+
+.ad-card-skins-loot .ad-sub-text {
+  font-size: 10.5px;
+  color: #e0cae6;
+  margin: 8px 0;
+  font-family: var(--font-main);
+  line-height: 1.4;
+}
+
+.ad-card-skins-loot .ad-action-btn {
+  background: #d900d9;
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-family: var(--font-head);
+  box-shadow: 0 4px 10px rgba(217, 0, 217, 0.2);
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.simulated-ad-card:hover .ad-card-skins-loot .ad-action-btn {
+  background: #ff1aff;
+  box-shadow: 0 4px 15px rgba(217, 0, 217, 0.4);
+}
+
+/* Ad Template: FPS Booster */
+.ad-card-fps-booster {
+  background: linear-gradient(135deg, #051d10 0%, #0d4024 100%);
+  border-top: 4px solid var(--accent);
+  width: 100%;
+  height: 100%;
+  padding: 24px 16px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.ad-card-fps-booster .ad-main-text {
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.3);
+}
+
+.ad-card-fps-booster .ad-sub-text {
+  font-size: 10.5px;
+  color: #bee4d0;
+  margin: 8px 0;
+  font-family: var(--font-main);
+  line-height: 1.4;
+}
+
+.ad-card-fps-booster .ad-action-btn {
+  background: var(--accent);
+  color: #021a0f;
+  border: none;
+  padding: 8px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-family: var(--font-head);
+  box-shadow: 0 4px 10px rgba(0, 255, 136, 0.2);
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.simulated-ad-card:hover .ad-card-fps-booster .ad-action-btn {
+  background: #33ff99;
+  box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4);
+}
+
+/* ── Progress bar pulsing effect ── */
+#download-ad-progress {
+  position: relative;
+}
+
+#download-ad-progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: progress-shimmer 1.5s infinite;
+}
+
+@keyframes progress-shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+#download-ad-confirm {
+  transition: all 0.3s ease;
+}
+
+#download-ad-confirm:hover {
+  background: #33ff99;
+  border-color: #33ff99;
+  transform: scale(1.02);
 }
