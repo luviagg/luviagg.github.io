@@ -41,6 +41,13 @@ const el = {
   startInput: document.getElementById('start-input'),
   endInput: document.getElementById('end-input'),
   selectedDuration: document.getElementById('selected-duration'),
+  formatSelect: document.getElementById('format-select'),
+  wavSettingsBlock: document.getElementById('wav-settings-block'),
+  mp3SettingsBlock: document.getElementById('mp3-settings-block'),
+  wavSampleRate: document.getElementById('wav-sample-rate'),
+  wavChannels: document.getElementById('wav-channels'),
+  mp3Bitrate: document.getElementById('mp3-bitrate'),
+  mp3Channels: document.getElementById('mp3-channels'),
   volumeRange: document.getElementById('volume-range'),
   volumeVal: document.getElementById('volume-val'),
   chkFadein: document.getElementById('chk-fadein'),
@@ -546,6 +553,19 @@ if (el.startInput && el.endInput) {
   });
 }
 
+if (el.formatSelect) {
+  el.formatSelect.addEventListener('change', () => {
+    const format = el.formatSelect.value;
+    if (format === 'wav') {
+      el.wavSettingsBlock.classList.remove('hidden');
+      el.mp3SettingsBlock.classList.add('hidden');
+    } else {
+      el.wavSettingsBlock.classList.add('hidden');
+      el.mp3SettingsBlock.classList.remove('hidden');
+    }
+  });
+}
+
 if (el.volumeRange && el.volumeVal) {
   el.volumeRange.addEventListener('input', () => {
     const val = el.volumeRange.value;
@@ -703,17 +723,18 @@ if (el.btnExport) {
     // Stop playback first
     stopPlayback();
     
+    const format = el.formatSelect.value;
     const baseName = state.fileName.substring(0, state.fileName.lastIndexOf('.')) || state.fileName;
-    const trimmedFilename = `${baseName}_recortado.wav`;
+    const trimmedFilename = `${baseName}_recortado.${format}`;
     
     // Route download action through the parent's ad-wall modal
     if (window.parent && window.parent.APP && typeof window.parent.APP.triggerAdAndDownload === 'function') {
       window.parent.APP.triggerAdAndDownload(
         trimmedFilename,
-        'Archivo de audio recortado en formato WAV (16-bit PCM) listo para colocar en cstrike/sound/.',
+        `Archivo de audio recortado en formato ${format.toUpperCase()} listo para colocar en el juego.`,
         () => {
           updateStatus('Procesando audio...', 'active');
-          showToast('Recortando y preparando audio para descarga...', 'info');
+          showToast(`Recortando y preparando audio ${format.toUpperCase()}...`, 'info');
           setTimeout(trimAndExportAudio, 50);
         },
         false // isCopy = false
@@ -721,21 +742,23 @@ if (el.btnExport) {
     } else {
       // Fallback fallback if loaded outside iframe
       updateStatus('Procesando audio...', 'active');
-      showToast('Recortando y preparando audio para descarga...', 'info');
+      showToast(`Recortando y preparando audio ${format.toUpperCase()}...`, 'info');
       setTimeout(trimAndExportAudio, 50);
     }
   });
 }
 
 function trimAndExportAudio() {
-  const sampleRate = state.audioBuffer.sampleRate;
-  const startSample = Math.floor(state.startTime * sampleRate);
-  const endSample = Math.floor(state.endTime * sampleRate);
-  const durationSamples = Math.max(1, endSample - startSample);
-  const numChannels = state.audioBuffer.numberOfChannels;
+  const format = el.formatSelect.value;
+  const targetSampleRate = format === 'wav' ? parseInt(el.wavSampleRate.value) : state.audioBuffer.sampleRate;
+  const targetChannels = format === 'wav' ? parseInt(el.wavChannels.value) : parseInt(el.mp3Channels.value);
+  
+  // Calculate relative duration and samples
+  const selectedDuration = state.endTime - state.startTime;
+  const durationSamples = Math.max(1, Math.floor(selectedDuration * targetSampleRate));
   
   // 1. Create a new AudioBuffer of correct trimmed size
-  const offlineCtx = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(numChannels, durationSamples, sampleRate);
+  const offlineCtx = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(targetChannels, durationSamples, targetSampleRate);
   
   // 2. Setup Source
   const source = offlineCtx.createBufferSource();
@@ -748,7 +771,7 @@ function trimAndExportAudio() {
   
   // 4. Apply Fade Effects if checked
   const fadeDuration = 0.5; // 500ms
-  const fadeSamples = Math.floor(fadeDuration * sampleRate);
+  const fadeSamples = Math.floor(fadeDuration * targetSampleRate);
   
   if (el.chkFadein.checked && durationSamples > fadeSamples) {
     gainNode.gain.setValueAtTime(0, 0);
@@ -756,32 +779,47 @@ function trimAndExportAudio() {
   }
   
   if (el.chkFadeout.checked && durationSamples > fadeSamples) {
-    const fadeStart = (durationSamples - fadeSamples) / sampleRate;
+    const fadeStart = selectedDuration - fadeDuration;
     gainNode.gain.setValueAtTime(volumeMultiplier, fadeStart);
-    gainNode.gain.linearRampToValueAtTime(0, durationSamples / sampleRate);
+    gainNode.gain.linearRampToValueAtTime(0, selectedDuration);
   }
   
   source.connect(gainNode);
   gainNode.connect(offlineCtx.destination);
   
   // Start playing buffer at the relative offset
-  source.start(0, state.startTime, durationSamples / sampleRate);
+  source.start(0, state.startTime, selectedDuration);
   
   // Render
   offlineCtx.startRendering()
     .then(renderedBuffer => {
-      // Convert Rendered Buffer to a 16-bit WAV ArrayBuffer
-      const wavArrayBuffer = bufferToWav(renderedBuffer);
-      const wavBlob = new Blob([wavArrayBuffer], { type: 'audio/wav' });
+      let outputBlob;
+      let ext;
+      
+      if (format === 'wav') {
+        const wavArrayBuffer = bufferToWav(renderedBuffer);
+        outputBlob = new Blob([wavArrayBuffer], { type: 'audio/wav' });
+        ext = 'wav';
+      } else {
+        // MP3 Export
+        if (typeof lamejs === 'undefined') {
+          showToast('Error: El codificador MP3 (lamejs) no cargó correctamente.', 'error');
+          updateStatus('Error de codificación', 'unfilled');
+          return;
+        }
+        
+        outputBlob = encodeMp3(renderedBuffer, parseInt(el.mp3Bitrate.value));
+        ext = 'mp3';
+      }
       
       // Trigger download
-      const downloadUrl = URL.createObjectURL(wavBlob);
+      const downloadUrl = URL.createObjectURL(outputBlob);
       const a = document.createElement('a');
       a.href = downloadUrl;
       
       // Build clean output filename
       let baseName = state.fileName.substring(0, state.fileName.lastIndexOf('.')) || state.fileName;
-      a.download = `${baseName}_recortado.wav`;
+      a.download = `${baseName}_recortado.${ext}`;
       
       document.body.appendChild(a);
       a.click();
@@ -790,7 +828,7 @@ function trimAndExportAudio() {
       // Clean up URL
       setTimeout(() => URL.revokeObjectURL(downloadUrl), 100);
       
-      showToast('Audio exportado en formato WAV.', 'success');
+      showToast(`Audio exportado en formato ${ext.toUpperCase()}.`, 'success');
       updateStatus('Exportación completa', 'active');
     })
     .catch(err => {
@@ -798,6 +836,63 @@ function trimAndExportAudio() {
       showToast('Error al exportar audio.', 'error');
       updateStatus('Error de exportación', 'unfilled');
     });
+}
+
+// ── 6.5. MP3 ENCODER HELPERS ──
+function encodeMp3(audioBuffer, bitrate) {
+  const channels = audioBuffer.numberOfChannels;
+  const sampleRate = audioBuffer.sampleRate;
+  const mp3encoder = new lamejs.Mp3Encoder(channels, sampleRate, bitrate);
+  
+  const mp3Data = [];
+  const sampleBlockSize = 1152; // LAME standard block size
+  
+  if (channels === 2) {
+    const leftData = audioBuffer.getChannelData(0);
+    const rightData = audioBuffer.getChannelData(1);
+    
+    // Convert float samples to 16-bit PCM Int16Array
+    const leftInt16 = new Int16Array(leftData.length);
+    const rightInt16 = new Int16Array(rightData.length);
+    floatTo16BitInt16Array(leftData, leftInt16);
+    floatTo16BitInt16Array(rightData, rightInt16);
+    
+    for (let i = 0; i < leftInt16.length; i += sampleBlockSize) {
+      const leftChunk = leftInt16.subarray(i, i + sampleBlockSize);
+      const rightChunk = rightInt16.subarray(i, i + sampleBlockSize);
+      const mp3buf = mp3encoder.encodeBuffer(leftChunk, rightChunk);
+      if (mp3buf.length > 0) {
+        mp3Data.push(new Int8Array(mp3buf));
+      }
+    }
+  } else {
+    // Mono
+    const monoData = audioBuffer.getChannelData(0);
+    const monoInt16 = new Int16Array(monoData.length);
+    floatTo16BitInt16Array(monoData, monoInt16);
+    
+    for (let i = 0; i < monoInt16.length; i += sampleBlockSize) {
+      const monoChunk = monoInt16.subarray(i, i + sampleBlockSize);
+      const mp3buf = mp3encoder.encodeBuffer(monoChunk);
+      if (mp3buf.length > 0) {
+        mp3Data.push(new Int8Array(mp3buf));
+      }
+    }
+  }
+  
+  const mp3buf = mp3encoder.flush();
+  if (mp3buf.length > 0) {
+    mp3Data.push(new Int8Array(mp3buf));
+  }
+  
+  return new Blob(mp3Data, { type: 'audio/mp3' });
+}
+
+function floatTo16BitInt16Array(floatArr, int16Arr) {
+  for (let i = 0; i < floatArr.length; i++) {
+    let s = Math.max(-1, Math.min(1, floatArr[i]));
+    int16Arr[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+  }
 }
 
 // ── 7. WAV FORMAT COMPILER HELPERS ──

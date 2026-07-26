@@ -12,6 +12,9 @@
   
   <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
+  
+  <!-- LAME MP3 Encoder Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.all.min.js"></script>
 </head>
 <body>
   <div class="audio-trimmer-app">
@@ -68,6 +71,58 @@
           <strong id="selected-duration">0.00s</strong>
         </div>
 
+        <!-- Format Selection -->
+        <div class="input-field">
+          <label for="format-select">Formato de Salida</label>
+          <select id="format-select" style="background: var(--bg-input); border: 1px solid var(--border); border-radius: 4px; padding: 6px 8px; color: var(--text-primary); font-size: 12px; font-family: var(--font-main);">
+            <option value="wav">WAV (.wav) - Ideal Efectos CS</option>
+            <option value="mp3">MP3 (.mp3) - Ideal Música</option>
+          </select>
+        </div>
+
+        <!-- WAV Specific Settings -->
+        <div id="wav-settings-block" class="format-settings-block">
+          <div class="range-inputs" style="margin-top: 4px;">
+            <div class="input-field">
+              <label for="wav-sample-rate">Frecuencia</label>
+              <select id="wav-sample-rate" style="background: var(--bg-input); border: 1px solid var(--border); border-radius: 4px; padding: 6px 8px; color: var(--text-primary); font-size: 11px; font-family: var(--font-main);">
+                <option value="22050" selected>22050 Hz (Estándar CS)</option>
+                <option value="44100">44100 Hz (Música/CD)</option>
+                <option value="11025">11025 Hz (Voz/Radio)</option>
+              </select>
+            </div>
+            <div class="input-field">
+              <label for="wav-channels">Canales</label>
+              <select id="wav-channels" style="background: var(--bg-input); border: 1px solid var(--border); border-radius: 4px; padding: 6px 8px; color: var(--text-primary); font-size: 11px; font-family: var(--font-main);">
+                <option value="1" selected>Mono (Recomendado)</option>
+                <option value="2">Estéreo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- MP3 Specific Settings -->
+        <div id="mp3-settings-block" class="format-settings-block hidden">
+          <div class="range-inputs" style="margin-top: 4px;">
+            <div class="input-field">
+              <label for="mp3-bitrate">Calidad (Bitrate)</label>
+              <select id="mp3-bitrate" style="background: var(--bg-input); border: 1px solid var(--border); border-radius: 4px; padding: 6px 8px; color: var(--text-primary); font-size: 11px; font-family: var(--font-main);">
+                <option value="128" selected>128 kbps (Estándar)</option>
+                <option value="192">192 kbps (Calidad Alta)</option>
+                <option value="320">320 kbps (Máxima)</option>
+                <option value="96">96 kbps (Baja)</option>
+              </select>
+            </div>
+            <div class="input-field">
+              <label for="mp3-channels">Canales</label>
+              <select id="mp3-channels" style="background: var(--bg-input); border: 1px solid var(--border); border-radius: 4px; padding: 6px 8px; color: var(--text-primary); font-size: 11px; font-family: var(--font-main);">
+                <option value="2" selected>Estéreo</option>
+                <option value="1">Mono</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
         <!-- Volume Controller -->
         <div class="volume-control">
           <div class="volume-header">
@@ -101,7 +156,7 @@
 
       <!-- Action Button -->
       <button class="btn-primary-action disabled" id="btn-export">
-        <span>💾</span> RECORTAR Y DESCARGAR WAV
+        <span>💾</span> RECORTAR Y DESCARGAR
       </button>
     </div>
 
