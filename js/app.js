@@ -2631,7 +2631,7 @@ const APP = {
     const progressBarEl = document.getElementById('download-ad-progress');
     const loaderSection = document.getElementById('download-ad-loader-section');
     const actionSection = document.getElementById('download-ad-action-section');
-    const adsGridEl = document.getElementById('simulated-ads-grid');
+    const adContentEl = document.getElementById('simulated-ad-content');
     const confirmBtn = document.getElementById('download-ad-confirm');
     
     // Copy specific elements
@@ -2664,45 +2664,45 @@ const APP = {
     else if (filename.endsWith('.zip')) icon = '📦';
     if (fileIconEl) fileIconEl.textContent = icon;
 
-    // Set simulated ads grid content
-    if (adsGridEl) {
-      adsGridEl.innerHTML = `
-        <div class="simulated-ad-card" id="ad-server-card">
-          <div class="ad-badge">Publicidad</div>
-          <div class="ad-content">
-            <div class="ad-card-cs-server">
-              <h4 class="ad-main-text">🏆 SERVIDORES CS 1.6 🏆</h4>
-              <p class="ad-sub-text">Ping bajo y anti-cheat. IP: <b>cs.luvia.gg:27015</b> (Click para copiar)</p>
-              <button class="ad-action-btn">Copiar IP</button>
-            </div>
+    // Set simulated ad content (rotating horizontal banners)
+    if (adContentEl) {
+      const ads = [
+        `
+        <div class="ad-banner-cs-server" id="ad-server-banner">
+          <div class="ad-text-section">
+            <h4 class="ad-main-text">🏆 SERVIDORES PREMIUM CS 1.6 🏆</h4>
+            <p class="ad-sub-text">Ping bajo y anti-cheat. IP: <b>cs.luvia.gg:27015</b> (Click para copiar)</p>
           </div>
+          <button class="ad-action-btn">Copiar IP</button>
         </div>
-        <div class="simulated-ad-card" id="ad-skins-card">
-          <div class="ad-badge">Publicidad</div>
-          <div class="ad-content">
-            <div class="ad-card-skins-loot">
-              <h4 class="ad-main-text">🎁 SKINS DIARIAS 🎁</h4>
-              <p class="ad-sub-text">Reclama tu tirada gratis de skins de CS:GO/CS2 hoy.</p>
-              <button class="ad-action-btn">Reclamar</button>
-            </div>
+        `,
+        `
+        <div class="ad-banner-skins-loot" id="ad-skins-banner">
+          <div class="ad-text-section">
+            <h4 class="ad-main-text">🎁 ¡SORTEO DE SKINS DIARIAS! 🎁</h4>
+            <p class="ad-sub-text">Reclama tu tirada gratis de skins de CS:GO/CS2 hoy.</p>
           </div>
+          <button class="ad-action-btn">Reclamar</button>
         </div>
-        <div class="simulated-ad-card" id="ad-fps-card">
-          <div class="ad-badge">Publicidad</div>
-          <div class="ad-content">
-            <div class="ad-card-fps-booster">
-              <h4 class="ad-main-text">🚀 FPS OPTIMIZER 🚀</h4>
-              <p class="ad-sub-text">Optimiza los rates y estabiliza tus FPS en 100 estables.</p>
-              <button class="ad-action-btn">Optimizar</button>
-            </div>
+        `,
+        `
+        <div class="ad-banner-fps-booster" id="ad-fps-banner">
+          <div class="ad-text-section">
+            <h4 class="ad-main-text">🚀 CS 1.6 REGISTRY OPTIMIZER 🚀</h4>
+            <p class="ad-sub-text">Optimiza los rates y estabiliza tus FPS en 100 estables.</p>
           </div>
+          <button class="ad-action-btn">Optimizar</button>
         </div>
-      `;
+        `
+      ];
 
-      // Setup click listeners for each card
-      const serverCard = adsGridEl.querySelector('#ad-server-card');
-      if (serverCard) {
-        serverCard.addEventListener('click', (e) => {
+      const randomAdIndex = Math.floor(Math.random() * ads.length);
+      adContentEl.innerHTML = ads[randomAdIndex];
+
+      // Setup click listeners
+      const serverBanner = adContentEl.querySelector('#ad-server-banner');
+      if (serverBanner) {
+        serverBanner.addEventListener('click', (e) => {
           e.preventDefault();
           navigator.clipboard.writeText('cs.luvia.gg:27015').then(() => {
             showToast('✅ IP copiada: cs.luvia.gg:27015. ¡Añádela a favoritos!', 'success');
@@ -2710,18 +2710,18 @@ const APP = {
         });
       }
 
-      const skinsCard = adsGridEl.querySelector('#ad-skins-card');
-      if (skinsCard) {
-        skinsCard.addEventListener('click', (e) => {
+      const skinsBanner = adContentEl.querySelector('#ad-skins-banner');
+      if (skinsBanner) {
+        skinsBanner.addEventListener('click', (e) => {
           e.preventDefault();
           showToast('🔗 Abriendo sorteo de skins (simulado)...', 'info');
           window.open('https://store.steampowered.com/app/10/CounterStrike/', '_blank');
         });
       }
 
-      const fpsCard = adsGridEl.querySelector('#ad-fps-card');
-      if (fpsCard) {
-        fpsCard.addEventListener('click', (e) => {
+      const fpsBanner = adContentEl.querySelector('#ad-fps-banner');
+      if (fpsBanner) {
+        fpsBanner.addEventListener('click', (e) => {
           e.preventDefault();
           showToast('🔗 Abriendo optimizador FPS (simulado)...', 'info');
           window.open('https://github.com/luviagg/luviagg.github.io', '_blank');

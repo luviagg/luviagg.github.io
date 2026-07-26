@@ -3035,38 +3035,39 @@ body.theme-matrix-code {
 }
 
 /* ── Download Ad Modal Styles ── */
-.simulated-ad-card {
+.simulated-ad-banner {
   width: 100%;
-  height: 160px;
+  max-width: 728px;
+  height: 90px;
   border: 1px dashed rgba(255, 255, 255, 0.15);
   background: rgba(0, 0, 0, 0.3);
   border-radius: 6px;
   position: relative;
   overflow: hidden;
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   box-sizing: border-box;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
+  margin: 0 auto;
 }
 
-.simulated-ad-card:hover {
+.simulated-ad-banner:hover {
   border-color: rgba(0, 255, 136, 0.5);
   box-shadow: inset 0 0 10px rgba(0, 255, 136, 0.1), 0 4px 12px rgba(0, 0, 0, 0.5);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
-.simulated-ad-card:active {
+.simulated-ad-banner:active {
   transform: translateY(1px);
 }
 
-.simulated-ad-card .ad-badge {
+.simulated-ad-banner .ad-badge {
   position: absolute;
-  top: 6px;
-  left: 6px;
+  top: 4px;
+  left: 4px;
   font-size: 8px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.35);
@@ -3080,171 +3081,159 @@ body.theme-matrix-code {
   letter-spacing: 0.5px;
 }
 
-.simulated-ad-card .ad-content {
+.simulated-ad-banner .ad-content {
   width: 100%;
   height: 100%;
   text-decoration: none;
-  display: flex;
-  flex-direction: column;
 }
 
-/* Ad Template: CS 1.6 Server Promotion */
-.ad-card-cs-server {
-  background: linear-gradient(135deg, #1a1005 0%, #381f02 100%);
-  border-top: 4px solid #ff9d00;
+/* Ad Template Base (Flex Row on Desktop, Column on Mobile) */
+.ad-banner-cs-server,
+.ad-banner-skins-loot,
+.ad-banner-fps-booster {
   width: 100%;
   height: 100%;
-  padding: 24px 16px 16px 16px;
+  padding: 12px 20px 12px 24px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: space-between;
+  gap: 12px;
   box-sizing: border-box;
-  text-align: center;
+  text-align: left;
 }
 
-.ad-card-cs-server .ad-main-text {
+.ad-banner-cs-server {
+  background: linear-gradient(135deg, #1a1005 0%, #381f02 100%);
+  border-left: 4px solid #ff9d00;
+}
+
+.ad-banner-skins-loot {
+  background: linear-gradient(135deg, #18051e 0%, #3a0b46 100%);
+  border-left: 4px solid #d900d9;
+}
+
+.ad-banner-fps-booster {
+  background: linear-gradient(135deg, #051d10 0%, #0d4024 100%);
+  border-left: 4px solid var(--accent);
+}
+
+.ad-text-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ad-main-text {
   font-family: var(--font-head);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin: 0;
+}
+
+.ad-banner-cs-server .ad-main-text {
   text-shadow: 0 0 8px rgba(255, 157, 0, 0.3);
 }
 
-.ad-card-cs-server .ad-sub-text {
-  font-size: 10.5px;
-  color: #c9b199;
-  margin: 8px 0;
-  font-family: var(--font-main);
-  line-height: 1.4;
+.ad-banner-skins-loot .ad-main-text {
+  text-shadow: 0 0 8px rgba(217, 0, 217, 0.4);
 }
 
-.ad-card-cs-server .ad-action-btn {
-  background: #ff9d00;
-  color: #0c0803;
+.ad-banner-fps-booster .ad-main-text {
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.3);
+}
+
+.ad-sub-text {
+  font-size: 11px;
+  margin: 4px 0 0 0;
+  font-family: var(--font-main);
+  line-height: 1.3;
+}
+
+.ad-banner-cs-server .ad-sub-text { color: #c9b199; }
+.ad-banner-skins-loot .ad-sub-text { color: #e0cae6; }
+.ad-banner-fps-booster .ad-sub-text { color: #bee4d0; }
+
+.ad-action-btn {
   border: none;
-  padding: 8px 12px;
+  padding: 8px 14px;
   font-size: 10px;
   font-weight: 700;
   border-radius: 4px;
   text-transform: uppercase;
   font-family: var(--font-head);
-  box-shadow: 0 4px 10px rgba(255, 157, 0, 0.2);
   transition: all 0.2s ease;
-  width: 100%;
+  white-space: nowrap;
+  cursor: pointer;
 }
 
-.simulated-ad-card:hover .ad-card-cs-server .ad-action-btn {
+.ad-banner-cs-server .ad-action-btn {
+  background: #ff9d00;
+  color: #0c0803;
+  box-shadow: 0 4px 10px rgba(255, 157, 0, 0.2);
+}
+
+.ad-banner-skins-loot .ad-action-btn {
+  background: #d900d9;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(217, 0, 217, 0.2);
+}
+
+.ad-banner-fps-booster .ad-action-btn {
+  background: var(--accent);
+  color: #021a0f;
+  box-shadow: 0 4px 10px rgba(0, 255, 136, 0.2);
+}
+
+.simulated-ad-banner:hover .ad-banner-cs-server .ad-action-btn {
   background: #ffb433;
   box-shadow: 0 4px 15px rgba(255, 157, 0, 0.4);
 }
 
-/* Ad Template: Free Skins Jackpot */
-.ad-card-skins-loot {
-  background: linear-gradient(135deg, #18051e 0%, #3a0b46 100%);
-  border-top: 4px solid #d900d9;
-  width: 100%;
-  height: 100%;
-  padding: 24px 16px 16px 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-.ad-card-skins-loot .ad-main-text {
-  font-family: var(--font-head);
-  font-size: 13px;
-  font-weight: 700;
-  color: #ffffff;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin: 0;
-  text-shadow: 0 0 8px rgba(217, 0, 217, 0.4);
-}
-
-.ad-card-skins-loot .ad-sub-text {
-  font-size: 10.5px;
-  color: #e0cae6;
-  margin: 8px 0;
-  font-family: var(--font-main);
-  line-height: 1.4;
-}
-
-.ad-card-skins-loot .ad-action-btn {
-  background: #d900d9;
-  color: #ffffff;
-  border: none;
-  padding: 8px 12px;
-  font-size: 10px;
-  font-weight: 700;
-  border-radius: 4px;
-  text-transform: uppercase;
-  font-family: var(--font-head);
-  box-shadow: 0 4px 10px rgba(217, 0, 217, 0.2);
-  transition: all 0.2s ease;
-  width: 100%;
-}
-
-.simulated-ad-card:hover .ad-card-skins-loot .ad-action-btn {
+.simulated-ad-banner:hover .ad-banner-skins-loot .ad-action-btn {
   background: #ff1aff;
   box-shadow: 0 4px 15px rgba(217, 0, 217, 0.4);
 }
 
-/* Ad Template: FPS Booster */
-.ad-card-fps-booster {
-  background: linear-gradient(135deg, #051d10 0%, #0d4024 100%);
-  border-top: 4px solid var(--accent);
-  width: 100%;
-  height: 100%;
-  padding: 24px 16px 16px 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-.ad-card-fps-booster .ad-main-text {
-  font-family: var(--font-head);
-  font-size: 13px;
-  font-weight: 700;
-  color: #ffffff;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin: 0;
-  text-shadow: 0 0 8px rgba(0, 255, 136, 0.3);
-}
-
-.ad-card-fps-booster .ad-sub-text {
-  font-size: 10.5px;
-  color: #bee4d0;
-  margin: 8px 0;
-  font-family: var(--font-main);
-  line-height: 1.4;
-}
-
-.ad-card-fps-booster .ad-action-btn {
-  background: var(--accent);
-  color: #021a0f;
-  border: none;
-  padding: 8px 12px;
-  font-size: 10px;
-  font-weight: 700;
-  border-radius: 4px;
-  text-transform: uppercase;
-  font-family: var(--font-head);
-  box-shadow: 0 4px 10px rgba(0, 255, 136, 0.2);
-  transition: all 0.2s ease;
-  width: 100%;
-}
-
-.simulated-ad-card:hover .ad-card-fps-booster .ad-action-btn {
+.simulated-ad-banner:hover .ad-banner-fps-booster .ad-action-btn {
   background: #33ff99;
   box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4);
+}
+
+/* Responsive Mobile Layout for horizontal banners */
+@media (max-width: 768px) {
+  .simulated-ad-banner {
+    width: 100%;
+    max-width: 320px;
+    height: 100px;
+  }
+  
+  .ad-banner-cs-server,
+  .ad-banner-skins-loot,
+  .ad-banner-fps-booster {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 10px 14px;
+    gap: 6px;
+  }
+  
+  .ad-main-text {
+    font-size: 11px;
+  }
+  
+  .ad-sub-text {
+    font-size: 9px;
+    margin: 2px 0 0 0;
+  }
+  
+  .ad-action-btn {
+    padding: 4px 10px;
+    font-size: 8.5px;
+    width: 100%;
+  }
 }
 
 /* ── Progress bar pulsing effect ── */
