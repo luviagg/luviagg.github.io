@@ -2821,3 +2821,20 @@ body.theme-matrix-code {
   border: 1px solid;
   background: rgba(255,255,255,0.05);
 }
+#cfg-preview-content,
+#graffiti-preview-content,
+#gui-preview-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.preview-body-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}

@@ -208,7 +208,8 @@ const APP = {
   initModuleState() {
     for (const mod of MODULES_CONFIG) {
       if (!this.state.modules[mod.id]) {
-        this.state.modules[mod.id] = { enabled: false, vars: {} };
+        const isCore = mod.id === 'keybinds' || mod.id === 'buymenu';
+        this.state.modules[mod.id] = { enabled: isCore, vars: {} };
       }
     }
     // Init aliases
@@ -464,7 +465,8 @@ const APP = {
     } else {
       // Reset all modules
       for (const mod of MODULES_CONFIG) {
-        this.state.modules[mod.id] = { enabled: false, vars: {} };
+        const isCore = mod.id === 'keybinds' || mod.id === 'buymenu';
+        this.state.modules[mod.id] = { enabled: isCore, vars: {} };
       }
       this.state.aliases = {};
       this.initModuleState();

@@ -601,36 +601,38 @@
               </button>
             </div>
             
-            <div class="spray-preview-wall">
-              <canvas id="spray-canvas" width="96" height="96"></canvas>
-            </div>
-            
-            <div class="spray-info-table">
-              <div class="spray-info-row">
-                <span class="info-label">Dimensiones:</span>
-                <span class="info-val" id="spray-dimensions">-</span>
+            <div class="preview-body-scroll">
+              <div class="spray-preview-wall">
+                <canvas id="spray-canvas" width="96" height="96"></canvas>
               </div>
-              <div class="spray-info-row">
-                <span class="info-label">Píxeles Totales:</span>
-                <span class="info-val" id="spray-total-pixels">-</span>
-              </div>
-              <div class="spray-info-row">
-                <span class="info-label">Compatibilidad WAD3:</span>
-                <span class="info-val" id="spray-compatibility">-</span>
-              </div>
-            </div>
-            
-            <div class="preview-instructions">
-              <div class="install-steps">
-                <div class="install-title">📁 Cómo instalar el Spray</div>
-                <div class="install-path" id="spray-install-path">
-                  <span class="path-label">Steam:</span>
-                  <code>Steam/steamapps/common/Half-Life/cstrike/</code>
+              
+              <div class="spray-info-table">
+                <div class="spray-info-row">
+                  <span class="info-label">Dimensiones:</span>
+                  <span class="info-val" id="spray-dimensions">-</span>
                 </div>
-                <div class="install-cmd" id="spray-install-steps">
-                  1. Descargá el archivo <b>tempdecal.wad</b>.<br>
-                  2. Guardalo en la carpeta indicada.<br>
-                  3. <b>Importante:</b> Dale click derecho al archivo descargado, selecciona Propiedades y marca <b>"Solo lectura"</b> para evitar que el juego lo sobrescriba.
+                <div class="spray-info-row">
+                  <span class="info-label">Píxeles Totales:</span>
+                  <span class="info-val" id="spray-total-pixels">-</span>
+                </div>
+                <div class="spray-info-row">
+                  <span class="info-label">Compatibilidad WAD3:</span>
+                  <span class="info-val" id="spray-compatibility">-</span>
+                </div>
+              </div>
+              
+              <div class="preview-instructions">
+                <div class="install-steps">
+                  <div class="install-title">📁 Cómo instalar el Spray</div>
+                  <div class="install-path" id="spray-install-path">
+                    <span class="path-label">Steam:</span>
+                    <code>Steam/steamapps/common/Half-Life/cstrike/</code>
+                  </div>
+                  <div class="install-cmd" id="spray-install-steps">
+                    1. Descargá el archivo <b>tempdecal.wad</b>.<br>
+                    2. Guardalo en la carpeta indicada.<br>
+                    3. <b>Importante:</b> Dale click derecho al archivo descargado, selecciona Propiedades y marca <b>"Solo lectura"</b> para evitar que el juego lo sobrescriba.
+                  </div>
                 </div>
               </div>
             </div>
@@ -655,48 +657,50 @@
               </button>
             </div>
             
-            <div style="padding: 16px;">
-              <div class="gui-preview-menu" id="gui-menu-preview-box">
-                <!-- Classic CS 1.6 links on left -->
-                <div class="gui-preview-left">
-                  <div class="gui-preview-link" id="gui-preview-link-accent" style="color: #00ff88;">Find Servers</div>
-                  <div class="gui-preview-link">Create Server</div>
-                  <div class="gui-preview-link">Options</div>
-                  <div class="gui-preview-link">Quit</div>
-                </div>
-                
-                <!-- Mock Server Browser Dialog in center -->
-                <div class="gui-preview-dialog-wrap">
-                  <div class="gui-preview-dialog" id="gui-dialog-box" style="background: #282020; border-color: #00ff88; color: #ffffff;">
-                    <div class="gui-preview-dialog-header">
-                      <span>Servers</span>
-                      <span id="gui-close-btn" style="color: #00ff88; font-weight: 900; cursor: pointer;">X</span>
-                    </div>
-                    <div class="gui-preview-dialog-body">
-                      <div class="gui-preview-dialog-row active" style="background: rgba(0, 255, 136, 0.15);"></div>
-                      <div class="gui-preview-dialog-row"></div>
-                      <div class="gui-preview-dialog-row"></div>
-                      <div class="gui-preview-dialog-row"></div>
-                    </div>
-                    <div class="gui-preview-dialog-footer">
-                      <button class="gui-preview-btn" style="border-color: #00ff88; color: #ffffff;">Connect</button>
-                      <button class="gui-preview-btn" style="border-color: #00ff88; color: #ffffff;">Close</button>
+            <div class="preview-body-scroll">
+              <div style="padding: 16px;">
+                <div class="gui-preview-menu" id="gui-menu-preview-box">
+                  <!-- Classic CS 1.6 links on left -->
+                  <div class="gui-preview-left">
+                    <div class="gui-preview-link" id="gui-preview-link-accent" style="color: #00ff88;">Find Servers</div>
+                    <div class="gui-preview-link">Create Server</div>
+                    <div class="gui-preview-link">Options</div>
+                    <div class="gui-preview-link">Quit</div>
+                  </div>
+                  
+                  <!-- Mock Server Browser Dialog in center -->
+                  <div class="gui-preview-dialog-wrap">
+                    <div class="gui-preview-dialog" id="gui-dialog-box" style="background: #282020; border-color: #00ff88; color: #ffffff;">
+                      <div class="gui-preview-dialog-header">
+                        <span>Servers</span>
+                        <span id="gui-close-btn" style="color: #00ff88; font-weight: 900; cursor: pointer;">X</span>
+                      </div>
+                      <div class="gui-preview-dialog-body">
+                        <div class="gui-preview-dialog-row active" style="background: rgba(0, 255, 136, 0.15);"></div>
+                        <div class="gui-preview-dialog-row"></div>
+                        <div class="gui-preview-dialog-row"></div>
+                        <div class="gui-preview-dialog-row"></div>
+                      </div>
+                      <div class="gui-preview-dialog-footer">
+                        <button class="gui-preview-btn" style="border-color: #00ff88; color: #ffffff;">Connect</button>
+                        <button class="gui-preview-btn" style="border-color: #00ff88; color: #ffffff;">Close</button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div class="preview-instructions">
-              <div class="install-steps">
-                <div class="install-title">📁 Cómo instalar la GUI</div>
-                <div class="install-path" id="gui-install-path">
-                  <span class="path-label">Steam:</span>
-                  <code>Steam/steamapps/common/Half-Life/cstrike/resource/</code>
-                </div>
-                <div class="install-cmd">
-                  1. Descargá y copia <b>TrackerScheme.res</b> en la carpeta <code>resource</code>.<br>
-                  2. Descargá el <b>Fondo Slicado (ZIP)</b>, descomprimí las 12 imágenes <code>.tga</code> y pegalas dentro de la carpeta <code>resource/background</code>.
+              <div class="preview-instructions">
+                <div class="install-steps">
+                  <div class="install-title">📁 Cómo instalar la GUI</div>
+                  <div class="install-path" id="gui-install-path">
+                    <span class="path-label">Steam:</span>
+                    <code>Steam/steamapps/common/Half-Life/cstrike/resource/</code>
+                  </div>
+                  <div class="install-cmd">
+                    1. Descargá y copia <b>TrackerScheme.res</b> en la carpeta <code>resource</code>.<br>
+                    2. Descargá el <b>Fondo Slicado (ZIP)</b>, descomprimí las 12 imágenes <code>.tga</code> y pegalas dentro de la carpeta <code>resource/background</code>.
+                  </div>
                 </div>
               </div>
             </div>
