@@ -2664,8 +2664,41 @@ const APP = {
     else if (filename.endsWith('.zip')) icon = '📦';
     if (fileIconEl) fileIconEl.textContent = icon;
 
-    // Set simulated ad content (rotating horizontal banners)
+    // Set AdSense block
     if (adContentEl) {
+      adContentEl.innerHTML = `
+        <ins class="adsbygoogle"
+             style="display:block;width:100%;height:100%;"
+             data-ad-format="fluid"
+             data-ad-layout-key="-7c+eo+1+2-5"
+             data-ad-client="ca-pub-3295246390356947"
+             data-ad-slot="5660597739"></ins>
+      `;
+    }
+
+    // Reset UI state
+    if (loaderSection) loaderSection.classList.remove('hidden');
+    if (actionSection) actionSection.classList.add('hidden');
+    if (progressBarEl) progressBarEl.style.width = '0%';
+    if (statusTextEl) statusTextEl.textContent = 'Conectando con el servidor de descargas...';
+    if (countdownTextEl) countdownTextEl.textContent = '10s';
+
+    // Show modal
+    modal.classList.remove('hidden');
+
+    // Trigger AdSense loading after container is visible
+    let adsenseLoaded = false;
+    if (window.adsbygoogle && typeof window.adsbygoogle.push === 'function') {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        adsenseLoaded = true;
+      } catch (e) {
+        console.warn("AdSense push failed:", e);
+      }
+    }
+
+    if (!adsenseLoaded && adContentEl) {
+      // Fallback rotating banners
       const ads = [
         `
         <div class="ad-banner-cs-server" id="ad-server-banner">
@@ -2728,16 +2761,6 @@ const APP = {
         });
       }
     }
-
-    // Reset UI state
-    if (loaderSection) loaderSection.classList.remove('hidden');
-    if (actionSection) actionSection.classList.add('hidden');
-    if (progressBarEl) progressBarEl.style.width = '0%';
-    if (statusTextEl) statusTextEl.textContent = 'Conectando con el servidor de descargas...';
-    if (countdownTextEl) countdownTextEl.textContent = '10s';
-
-    // Show modal
-    modal.classList.remove('hidden');
 
     // Draw copy preview canvas AFTER showing modal to ensure correct clientWidth
     if (isCopy && copyCanvas) {
