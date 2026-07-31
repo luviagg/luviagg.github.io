@@ -901,13 +901,47 @@
     </div>
   </div>
 
+  <!-- ========== ADBLOCK DETECTOR MODAL ========== -->
+  <div id="adblock-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 99999999; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background: rgba(5, 7, 12, 0.92); align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;">
+    <div style="max-width: 480px; width: 100%; text-align: center; background: rgba(13, 17, 23, 0.98); border: 1px solid rgba(255, 68, 102, 0.4); box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 40px rgba(255, 68, 102, 0.25); border-radius: 16px; padding: 32px 24px; color: #fff; box-sizing: border-box;">
+      
+      <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(255, 68, 102, 0.15); border: 1px solid rgba(255,68,102,0.4); color: #ff4466; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 20px auto;">
+        🛡️
+      </div>
+
+      <h2 style="font-family: sans-serif; font-size: 22px; font-weight: 700; color: #fff; margin: 0 0 12px 0; letter-spacing: 0.5px;">
+        Bloqueador de Anuncios Detectado
+      </h2>
+
+      <p style="font-size: 13px; color: #8b97a8; line-height: 1.6; margin: 0 0 20px 0;">
+        Para que la aplicación funcione correctamente y puedas usar los generadores, herramientas y descargas al 100%, <strong style="color: #f0f4f8;">por favor desactiva tu AdBlocker / Anti-Publicidad</strong> en este sitio.
+      </p>
+
+      <div style="background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.12); border-radius: 10px; padding: 14px; margin-bottom: 24px; text-align: left;">
+        <div style="font-size: 12px; font-weight: 600; color: #00ff88; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+          <span>💡</span> ¿Por qué pedimos esto?
+        </div>
+        <p style="font-size: 11px; color: #8b97a8; margin: 0; line-height: 1.5;">
+          Nuestra publicidad es mínima y no invasiva. Los bloqueadores interfieren con los scripts internos de la herramienta y deshabilitan funciones esenciales.
+        </p>
+      </div>
+
+      <button id="btn-recheck-adblock" style="width: 100%; justify-content: center; padding: 12px; font-weight: 700; font-size: 14px; background: linear-gradient(135deg, #ff4466, #e03150); border: none; border-radius: 8px; color: #fff; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 68, 102, 0.3);">
+        🔄 Ya lo desactivé, verificar de nuevo
+      </button>
+
+    </div>
+  </div>
+
   <!-- ========== TOASTS ========== -->
   <div id="toasts" aria-live="polite"></div>
 
   <!-- ========== SCRIPTS ========== -->
+  <script src="js/ads.js"></script>
   <script src="js/data.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/adblock-detector.js"></script>
 
 </body>
 </html>
