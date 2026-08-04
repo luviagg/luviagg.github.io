@@ -1,5 +1,5 @@
 /* =====================================================================
-   ADBLOCK DETECTOR & RESTRICTION SYSTEM (ULTRA STRICT)
+   ADBLOCK DETECTOR & RESTRICTION SYSTEM (ROBUST & ACCURATE)
    ===================================================================== */
 
 (function () {
@@ -35,23 +35,32 @@
 
   function checkAdBlocker() {
     return new Promise((resolve) => {
-      // Test 1: Verificar la variable global del script ads.js
+      let isBlocked = false;
+
+      // 1. Verificar si el script ads.js fue bloqueado
       if (window.canRunAds !== true) {
-        return resolve(true);
+        isBlocked = true;
       }
 
-      // Test 2: Crear un elemento trampa con clases e IDs extremadamente atractivos para bloqueadores
+      // 2. Probar si el script de Google AdSense fue bloqueado o no existe la variable google_ad_client / adsbygoogle
+      const adsScript = document.querySelector('script[src*="adsbygoogle.js"]');
+      if (adsScript && (window.adsbygoogle === undefined || adsScript.getAttribute('data-adblock-blocked') === 'true')) {
+        isBlocked = true;
+      }
+
+      // 3. Crear trampa de DOM visible en pantalla (dentro del flujo pero invisible para el usuario)
       const fakeAd = document.createElement('div');
       fakeAd.id = 'ad-banner-top';
       fakeAd.className = 'adsbygoogle ad-banner pub_300x250 text-ad ad_box ad-slot google-auto-placed';
-      fakeAd.style.cssText = 'width: 100px !important; height: 100px !important; position: absolute !important; left: -9999px !important; top: -9999px !important; display: block !important; visibility: visible !important;';
+      fakeAd.style.cssText = 'width: 1px !important; height: 1px !important; position: fixed !important; top: -10px !important; left: -10px !important; opacity: 0.01 !important; pointer-events: none !important;';
+      fakeAd.setAttribute('data-ad-client', 'ca-pub-3295246390356947');
       fakeAd.innerHTML = '&nbsp;';
       document.body.appendChild(fakeAd);
 
-      // Evaluar inmediatamente y a los 100ms
+      // Evaluar tras breve pausa para que los adblockers (uBlock, AdBlock, Brave, DuckDuckGo) actúen
       setTimeout(() => {
         const style = window.getComputedStyle(fakeAd);
-        const isBlocked =
+        const domBlocked =
           fakeAd.offsetParent === null ||
           fakeAd.offsetHeight === 0 ||
           fakeAd.offsetWidth === 0 ||
@@ -60,8 +69,24 @@
           style.opacity === '0';
 
         fakeAd.remove();
-        resolve(isBlocked);
-      }, 100);
+
+        if (domBlocked) {
+          isBlocked = true;
+        }
+
+        // 4. Intentar fetch de prueba a script publicitario conocido
+        fetch('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3295246390356947', {
+          method: 'HEAD',
+          mode: 'no-cors',
+          cache: 'no-store'
+        }).then(() => {
+          resolve(isBlocked);
+        }).catch(() => {
+          // Si el fetch falla (net::ERR_BLOCKED_BY_CLIENT / ERR_BLOCKED_BY_ADBLOCKER)
+          resolve(true);
+        });
+
+      }, 150);
     });
   }
 
@@ -70,17 +95,27 @@
     applyAdBlockState(detected);
   }
 
-  // Ejecutar inmediatamente
+  // Escuchar errores globales de carga de scripts (ej. adsbygoogle.js o ads.js bloqueados por la extensión)
+  window.addEventListener('error', (e) => {
+    if (e.target && e.target.tagName === 'SCRIPT') {
+      const src = e.target.src || '';
+      if (src.includes('adsbygoogle') || src.includes('ads.js')) {
+        applyAdBlockState(true);
+      }
+    }
+  }, true);
+
+  // Inicializar detector
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', runDetector);
+    document.addEventListener('DOMContentLoaded', () => setTimeout(runDetector, 200));
   } else {
-    runDetector();
+    setTimeout(runDetector, 200);
   }
 
-  // Ejecución de respaldo a los 500ms por si el adblocker tardó en inyectar sus reglas
-  setTimeout(runDetector, 500);
+  // Chequeo de respaldo a los 800ms
+  setTimeout(runDetector, 800);
 
-  // Configurar listeners una vez listo el DOM
+  // Listener para el botón de re-verificación en el modal
   document.addEventListener('DOMContentLoaded', () => {
     const btnRecheck = document.getElementById('btn-recheck-adblock');
     if (btnRecheck) {
@@ -88,10 +123,9 @@
         btnRecheck.innerText = '⏳ Verificando...';
         btnRecheck.disabled = true;
 
-        // Limpiar variable para probar si ahora sí carga
         window.canRunAds = undefined;
 
-        // Intentar recargar el script de anuncios
+        // Intentar recargar el script de prueba ads.js
         await new Promise((resolve) => {
           const script = document.createElement('script');
           script.src = 'js/ads.js?t=' + Date.now();
@@ -113,7 +147,7 @@
     }
   });
 
-  // Re-verificar si la ventana gana el foco
+  // Re-verificar automáticamente cuando la ventana vuelve a tener foco
   window.addEventListener('focus', () => {
     runDetector();
   });
