@@ -4,8 +4,11 @@
   <meta charset="UTF-8">
   <title>Redireccionando...</title>
   <script>
-    // Redirect immediately to the root homepage
-    window.location.replace("/");
+    if (window.location.pathname.includes('admin')) {
+      window.location.replace("/admin.html");
+    } else {
+      window.location.replace("/");
+    }
   </script>
 </head>
 <body>

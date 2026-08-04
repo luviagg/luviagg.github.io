@@ -1,0 +1,9 @@
+{
+  "name": "cs-cfg-builder",
+  "version": "1.0.0",
+  "description": "CS 1.6 CFG Builder",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
