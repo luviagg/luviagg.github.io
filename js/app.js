@@ -1393,11 +1393,6 @@ const APP = {
       if (modal) modal.classList.add('hidden');
     };
 
-    const luviaProfileCard = document.getElementById('luvia-profile-card');
-    if (luviaProfileCard) {
-      luviaProfileCard.addEventListener('click', openDisclaimer);
-    }
-
     const btnShowDisclaimer = document.getElementById('btn-show-disclaimer');
     if (btnShowDisclaimer) {
       btnShowDisclaimer.addEventListener('click', (e) => {
@@ -2737,30 +2732,30 @@ const APP = {
       // Fallback rotating banners
       const ads = [
         `
-        <div class="ad-banner-cs-server" id="ad-server-banner">
-          <div class="ad-text-section">
-            <h4 class="ad-main-text">🏆 SERVIDORES PREMIUM CS 1.6 🏆</h4>
-            <p class="ad-sub-text">Ping bajo y anti-cheat. IP: <b>cs.luvia.gg:27015</b> (Click para copiar)</p>
+        <div class="promo-card-cs-server" id="ad-server-banner">
+          <div class="promo-text-section">
+            <h4 class="promo-main-title">🏆 SERVIDORES PREMIUM CS 1.6 🏆</h4>
+            <p class="promo-subtitle">Ping bajo y anti-cheat. IP: <b>cs.luvia.gg:27015</b> (Click para copiar)</p>
           </div>
-          <button class="ad-action-btn">Copiar IP</button>
+          <button class="promo-action-btn">Copiar IP</button>
         </div>
         `,
         `
-        <div class="ad-banner-skins-loot" id="ad-skins-banner">
-          <div class="ad-text-section">
-            <h4 class="ad-main-text">🎁 ¡SORTEO DE SKINS DIARIAS! 🎁</h4>
-            <p class="ad-sub-text">Reclama tu tirada gratis de skins de CS:GO/CS2 hoy.</p>
+        <div class="promo-card-skins-loot" id="ad-skins-banner">
+          <div class="promo-text-section">
+            <h4 class="promo-main-title">🎁 ¡SORTEO DE SKINS DIARIAS! 🎁</h4>
+            <p class="promo-subtitle">Reclama tu tirada gratis de skins de CS:GO/CS2 hoy.</p>
           </div>
-          <button class="ad-action-btn">Reclamar</button>
+          <button class="promo-action-btn">Reclamar</button>
         </div>
         `,
         `
-        <div class="ad-banner-fps-booster" id="ad-fps-banner">
-          <div class="ad-text-section">
-            <h4 class="ad-main-text">🚀 CS 1.6 REGISTRY OPTIMIZER 🚀</h4>
-            <p class="ad-sub-text">Optimiza los rates y estabiliza tus FPS en 100 estables.</p>
+        <div class="promo-card-fps-booster" id="ad-fps-banner">
+          <div class="promo-text-section">
+            <h4 class="promo-main-title">🚀 CS 1.6 REGISTRY OPTIMIZER 🚀</h4>
+            <p class="promo-subtitle">Optimiza los rates y estabiliza tus FPS en 100 estables.</p>
           </div>
-          <button class="ad-action-btn">Optimizar</button>
+          <button class="promo-action-btn">Optimizar</button>
         </div>
         `
       ];

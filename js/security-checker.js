@@ -35,16 +35,16 @@
 
   function checkAdBlocker() {
     return new Promise((resolve) => {
-      // Si js/ads.js cargó la variable global correctamente, asumimos inicialmente que no hay bloqueo de scripts
+      // Si js/partner-loader.js cargó la variable global correctamente, asumimos inicialmente que no hay bloqueo de scripts
       let adBlockFound = false;
 
-      if (window.canRunAds !== true) {
+      if (window.canLoadPartnerNet !== true) {
         adBlockFound = true;
       }
 
       // Crear elemento trampa visible (pero fuera de pantalla para el usuario)
       const fakeAd = document.createElement('div');
-      fakeAd.id = 'ad-banner-top';
+      fakeAd.id = 'partner-check-elem';
       fakeAd.className = 'adsbygoogle ad-banner pub_300x250 text-ad ad_box ad-slot';
       fakeAd.style.cssText = 'width: 100px !important; height: 100px !important; position: absolute !important; left: -9999px !important; top: -9999px !important; display: block !important; visibility: visible !important;';
       fakeAd.innerHTML = '&nbsp;';
@@ -90,12 +90,12 @@
         btnRecheck.innerText = '⏳ Verificando...';
         btnRecheck.disabled = true;
 
-        window.canRunAds = undefined;
+        window.canLoadPartnerNet = undefined;
 
-        // Intentar recargar js/ads.js
+        // Intentar recargar js/partner-loader.js
         await new Promise((resolve) => {
           const script = document.createElement('script');
-          script.src = 'js/ads.js?t=' + Date.now();
+          script.src = 'js/partner-loader.js?t=' + Date.now();
           script.onload = () => resolve();
           script.onerror = () => resolve();
           document.head.appendChild(script);

@@ -96,12 +96,6 @@
               <a href="#" onclick="event.preventDefault(); APP.selectPlatformDropdown('cscz', 'nosteam')">💀 No-Steam</a>
             </div>
           </div>
-          <button class="game-btn" data-game="hl" id="game-btn-hl">
-            <span>☢️</span> HL
-          </button>
-          <button class="game-btn" data-game="sven" id="game-btn-sven">
-            <span>👾</span> Sven Co-op
-          </button>
           <button class="game-btn" data-game="css" id="game-btn-css">
             <span>🎯</span> CS:S
           </button>
@@ -207,12 +201,8 @@
           </button>
           
           <!-- Mini Perfil Luvia -->
-          <div class="luvia-profile" id="luvia-profile-card" style="cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: 8px; transition: background 0.2s;" title="Términos y Responsabilidad" onmouseover="this.style.background='rgba(255,255,255,0.03)'" onmouseout="this.style.background='transparent'">
-            <img src="img/1.webp" alt="Luvia Avatar" class="luvia-avatar">
-            <span class="luvia-name" style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.2;">
-              LUVIA
-              <span style="font-size: 8px; color: var(--accent); opacity: 0.8; font-weight: 700; margin-top: 2px; letter-spacing: 0.5px;">VER TÉRMINOS 2026</span>
-            </span>
+          <div class="luvia-profile" id="luvia-profile-card" style="position: relative; width: 100%; height: 170px; border-radius: 12px; overflow: hidden; margin-bottom: 16px; border: 1px solid rgba(255, 68, 102, 0.4); box-shadow: 0 4px 16px rgba(255, 68, 102, 0.2);">
+            <img src="img/1.webp" alt="Luvia Avatar" style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;">
           </div>
 
           <!-- Selector de Temas / Skins -->
@@ -228,20 +218,38 @@
             </select>
           </div>
           
-          <div class="sidebar-section-label neon-pink-text">Redes Sociales</div>
-          <ul class="neon-list" style="margin-bottom: 20px;">
-            <li><a href="https://www.tiktok.com/@luvia.gg" target="_blank" rel="noopener noreferrer"><span>📱</span> TikTok</a></li>
-            <li><a href="https://www.instagram.com/luvia.gg" target="_blank" rel="noopener noreferrer"><span>📸</span> Instagram</a></li>
-            <li><a href="https://www.facebook.com/LuviaFace/" target="_blank" rel="noopener noreferrer"><span>👥</span> Facebook</a></li>
-            <li><a href="https://x.com/luvia_gg" target="_blank" rel="noopener noreferrer"><span>🐦</span> X (Twitter)</a></li>
-            <li><a href="https://discord.gg/Luviagg" target="_blank" rel="noopener noreferrer"><span>💬</span> Discord (Luviagg)</a></li>
-            <li><a href="#" id="btn-show-disclaimer" onclick="event.preventDefault();"><span>⚖️</span> Términos</a></li>
-          </ul>
+          <div id="social-networks-dynamic-section">
+            <div class="sidebar-section-label neon-pink-text">Redes Sociales</div>
+            <ul class="neon-list" style="margin-bottom: 20px;">
+              <li><a href="https://www.tiktok.com/@luvia.gg" target="_blank" rel="noopener noreferrer"><span>📱</span> TikTok</a></li>
+              <li><a href="https://www.instagram.com/luvia.gg" target="_blank" rel="noopener noreferrer"><span>📸</span> Instagram</a></li>
+              <li><a href="https://www.facebook.com/LuviaFace/" target="_blank" rel="noopener noreferrer"><span>👥</span> Facebook</a></li>
+              <li><a href="https://x.com/luvia_gg" target="_blank" rel="noopener noreferrer"><span>🐦</span> X (Twitter)</a></li>
+              <li><a href="https://discord.gg/Luviagg" target="_blank" rel="noopener noreferrer"><span>💬</span> Discord (Luviagg)</a></li>
+            </ul>
 
-          <div class="sidebar-section-label neon-cyan-text" id="projects-label">Proyectos</div>
-          <ul class="neon-list" id="projects-list">
-            <li><a href="#" onclick="event.preventDefault(); APP.toggleSidebarView('default')"><span>🛠️</span> CSCFGBuilder</a></li>
-          </ul>
+            <div class="sidebar-section-label neon-cyan-text">Proyectos</div>
+            <ul class="neon-list" style="margin-bottom: 20px;">
+              <li><a href="#" onclick="event.preventDefault(); APP.toggleSidebarView('default')"><span>🛠️</span> CSCFGBuilder</a></li>
+            </ul>
+            <ul class="neon-list" style="margin-bottom: 20px;">
+              <li><a href="#" id="btn-show-disclaimer" onclick="event.preventDefault();"><span>⚖️</span> Términos</a></li>
+            </ul>
+          </div>
+            <ul class="neon-list" id="social-links-list" style="margin-bottom: 20px;">
+              <li><a href="https://www.tiktok.com/@luvia.gg" target="_blank" rel="noopener noreferrer"><span>📱</span> TikTok</a></li>
+              <li><a href="https://www.instagram.com/luvia.gg" target="_blank" rel="noopener noreferrer"><span>📸</span> Instagram</a></li>
+              <li><a href="https://www.facebook.com/LuviaFace/" target="_blank" rel="noopener noreferrer"><span>👥</span> Facebook</a></li>
+              <li><a href="https://x.com/luvia_gg" target="_blank" rel="noopener noreferrer"><span>🐦</span> X (Twitter)</a></li>
+              <li><a href="https://discord.gg/Luviagg" target="_blank" rel="noopener noreferrer"><span>💬</span> Discord (Luviagg)</a></li>
+              <li><a href="#" id="btn-show-disclaimer" onclick="event.preventDefault();"><span>⚖️</span> Términos</a></li>
+            </ul>
+
+            <div class="sidebar-section-label neon-cyan-text" id="projects-label">Proyectos</div>
+            <ul class="neon-list" id="projects-list">
+              <li><a href="#" onclick="event.preventDefault(); APP.toggleSidebarView('default')"><span>🛠️</span> CSCFGBuilder</a></li>
+            </ul>
+          </div>
         </div>
 
         <div class="sidebar-footer">
@@ -266,7 +274,9 @@
           <!-- Graffiti Tool Content View -->
           <div id="graffiti-content-view" class="hidden">
             <div class="graffiti-header">
-              <h2 class="section-title">Generador de Grafiti / Spray</h2>
+              <h2 class="section-title">
+        Bloqueador de Anuncios Detectado
+      </h2>
               <p class="section-subtitle">Convierte cualquier imagen en un spray personalizado en tiempo real.</p>
             </div>
             
@@ -854,10 +864,10 @@
       </div>
       <div class="modal-body" style="display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center;">
         
-        <!-- Retro Simulated Ad Banner Container -->
-        <div id="simulated-ad-container" class="simulated-ad-banner">
-          <div class="ad-badge">Publicidad</div>
-          <div id="simulated-ad-content" class="ad-content">
+        <!-- Retro Simulated Promo Banner Container -->
+        <div id="simulated-ad-container" class="promo-spot-card">
+          <div class="promo-badge">Publicidad</div>
+          <div id="simulated-ad-content" class="promo-content">
             <!-- Simulated Content will be injected dynamically -->
           </div>
         </div>
@@ -937,11 +947,11 @@
   <div id="toasts" aria-live="polite"></div>
 
   <!-- ========== SCRIPTS ========== -->
-  <script src="js/ads.js"></script>
+  <script src="js/partner-loader.js"></script>
   <script src="js/data.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/app.js"></script>
-  <script src="js/adblock-detector.js"></script>
+  <script src="js/security-checker.js"></script>
 
 </body>
 </html>

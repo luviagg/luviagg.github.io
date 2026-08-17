@@ -3034,8 +3034,8 @@ body.theme-matrix-code {
   flex-direction: column;
 }
 
-/* ── Download Ad Modal Styles ── */
-.simulated-ad-banner {
+/* ── Download Promo Spot Modal Styles ── */
+.promo-spot-card {
   width: 100%;
   max-width: 800px;
   height: 250px;
@@ -3054,17 +3054,17 @@ body.theme-matrix-code {
   margin: 0 auto;
 }
 
-.simulated-ad-banner:hover {
+.promo-spot-card:hover {
   border-color: rgba(0, 255, 136, 0.5);
   box-shadow: inset 0 0 15px rgba(0, 255, 136, 0.1), 0 8px 24px rgba(0, 0, 0, 0.6);
   transform: translateY(-2px);
 }
 
-.simulated-ad-banner:active {
+.promo-spot-card:active {
   transform: translateY(1px);
 }
 
-.simulated-ad-banner .ad-badge {
+.promo-spot-card .promo-badge {
   position: absolute;
   top: 8px;
   left: 8px;
@@ -3081,16 +3081,16 @@ body.theme-matrix-code {
   letter-spacing: 0.5px;
 }
 
-.simulated-ad-banner .ad-content {
+.promo-spot-card .promo-content {
   width: 100%;
   height: 100%;
   text-decoration: none;
 }
 
-/* Ad Template Base (Flex Column stacked vertically like a large Cover) */
-.ad-banner-cs-server,
-.ad-banner-skins-loot,
-.ad-banner-fps-booster {
+/* Promo Template Base (Flex Column stacked vertically like a large Cover) */
+.promo-card-cs-server,
+.promo-card-skins-loot,
+.promo-card-fps-booster {
   width: 100%;
   height: 100%;
   padding: 32px 24px;
@@ -3103,29 +3103,29 @@ body.theme-matrix-code {
   text-align: center;
 }
 
-.ad-banner-cs-server {
+.promo-card-cs-server {
   background: linear-gradient(135deg, #201202 0%, #462502 100%);
   border-top: 5px solid #ff9d00;
 }
 
-.ad-banner-skins-loot {
+.promo-card-skins-loot {
   background: linear-gradient(135deg, #200428 0%, #4a0c5c 100%);
   border-top: 5px solid #d900d9;
 }
 
-.ad-banner-fps-booster {
+.promo-card-fps-booster {
   background: linear-gradient(135deg, #031c0e 0%, #0d4625 100%);
   border-top: 5px solid var(--accent);
 }
 
-.ad-text-section {
+.promo-text-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
 }
 
-.ad-main-text {
+.promo-main-title {
   font-family: var(--font-head);
   font-size: 22px;
   font-weight: 700;
@@ -3135,19 +3135,19 @@ body.theme-matrix-code {
   margin: 0;
 }
 
-.ad-banner-cs-server .ad-main-text {
+.promo-card-cs-server .promo-main-title {
   text-shadow: 0 0 12px rgba(255, 157, 0, 0.4);
 }
 
-.ad-banner-skins-loot .ad-main-text {
+.promo-card-skins-loot .promo-main-title {
   text-shadow: 0 0 12px rgba(217, 0, 217, 0.5);
 }
 
-.ad-banner-fps-booster .ad-main-text {
+.promo-card-fps-booster .promo-main-title {
   text-shadow: 0 0 12px rgba(0, 255, 136, 0.4);
 }
 
-.ad-sub-text {
+.promo-subtitle {
   font-size: 13px;
   margin: 0;
   font-family: var(--font-main);
@@ -3155,11 +3155,11 @@ body.theme-matrix-code {
   max-width: 500px;
 }
 
-.ad-banner-cs-server .ad-sub-text { color: #d9c1aa; }
-.ad-banner-skins-loot .ad-sub-text { color: #ecc6fa; }
-.ad-banner-fps-booster .ad-sub-text { color: #c4eccf; }
+.promo-card-cs-server .promo-subtitle { color: #d9c1aa; }
+.promo-card-skins-loot .promo-subtitle { color: #ecc6fa; }
+.promo-card-fps-booster .promo-subtitle { color: #c4eccf; }
 
-.ad-action-btn {
+.promo-action-btn {
   border: none;
   padding: 10px 24px;
   font-size: 11px;
@@ -3172,37 +3172,37 @@ body.theme-matrix-code {
   cursor: pointer;
 }
 
-.ad-banner-cs-server .ad-action-btn {
+.promo-card-cs-server .promo-action-btn {
   background: #ff9d00;
   color: #0c0803;
   box-shadow: 0 4px 12px rgba(255, 157, 0, 0.3);
 }
 
-.ad-banner-skins-loot .ad-action-btn {
+.promo-card-skins-loot .promo-action-btn {
   background: #d900d9;
   color: #ffffff;
   box-shadow: 0 4px 12px rgba(217, 0, 217, 0.3);
 }
 
-.ad-banner-fps-booster .ad-action-btn {
+.promo-card-fps-booster .promo-action-btn {
   background: var(--accent);
   color: #021a0f;
   box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
 }
 
-.simulated-ad-banner:hover .ad-banner-cs-server .ad-action-btn {
+.promo-spot-card:hover .promo-card-cs-server .promo-action-btn {
   background: #ffb433;
   box-shadow: 0 6px 20px rgba(255, 157, 0, 0.5);
   transform: scale(1.03);
 }
 
-.simulated-ad-banner:hover .ad-banner-skins-loot .ad-action-btn {
+.promo-spot-card:hover .promo-card-skins-loot .promo-action-btn {
   background: #ff1aff;
   box-shadow: 0 6px 20px rgba(217, 0, 217, 0.5);
   transform: scale(1.03);
 }
 
-.simulated-ad-banner:hover .ad-banner-fps-booster .ad-action-btn {
+.promo-spot-card:hover .promo-card-fps-booster .promo-action-btn {
   background: #33ff99;
   box-shadow: 0 6px 20px rgba(0, 255, 136, 0.5);
   transform: scale(1.03);
@@ -3210,15 +3210,15 @@ body.theme-matrix-code {
 
 /* Responsive Mobile Layout for large cover banners */
 @media (max-width: 768px) {
-  .simulated-ad-banner {
+  .promo-spot-card {
     width: 100%;
     max-width: 320px;
     height: 160px;
   }
   
-  .ad-banner-cs-server,
-  .ad-banner-skins-loot,
-  .ad-banner-fps-booster {
+  .promo-card-cs-server,
+  .promo-card-skins-loot,
+  .promo-card-fps-booster {
     padding: 16px;
     gap: 8px;
   }
