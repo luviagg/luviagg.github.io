@@ -1,1 +1,1 @@
-window.canLoadPartnerNet = true;
+window.canRunAds = true;

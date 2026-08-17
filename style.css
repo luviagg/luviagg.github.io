@@ -3034,8 +3034,9 @@ body.theme-matrix-code {
   flex-direction: column;
 }
 
-/* ── Download Promo Spot Modal Styles ── */
-.promo-spot-card {
+/* ── Download Ad Modal Styles ── */
+.simulated-ad-banner,
+.promo-banner-box {
   width: 100%;
   max-width: 800px;
   height: 250px;
@@ -3054,17 +3055,20 @@ body.theme-matrix-code {
   margin: 0 auto;
 }
 
-.promo-spot-card:hover {
+.simulated-ad-banner:hover,
+.promo-banner-box:hover {
   border-color: rgba(0, 255, 136, 0.5);
   box-shadow: inset 0 0 15px rgba(0, 255, 136, 0.1), 0 8px 24px rgba(0, 0, 0, 0.6);
   transform: translateY(-2px);
 }
 
-.promo-spot-card:active {
+.simulated-ad-banner:active,
+.promo-banner-box:active {
   transform: translateY(1px);
 }
 
-.promo-spot-card .promo-badge {
+.simulated-ad-banner .ad-badge,
+.promo-banner-box .partner-badge {
   position: absolute;
   top: 8px;
   left: 8px;
@@ -3081,16 +3085,20 @@ body.theme-matrix-code {
   letter-spacing: 0.5px;
 }
 
-.promo-spot-card .promo-content {
+.simulated-ad-banner .ad-content,
+.promo-banner-box .partner-content-box {
   width: 100%;
   height: 100%;
   text-decoration: none;
 }
 
-/* Promo Template Base (Flex Column stacked vertically like a large Cover) */
-.promo-card-cs-server,
-.promo-card-skins-loot,
-.promo-card-fps-booster {
+/* Ad Template Base (Flex Column stacked vertically like a large Cover) */
+.ad-banner-cs-server,
+.ad-banner-skins-loot,
+.ad-banner-fps-booster,
+.partner-banner-cs,
+.partner-banner-skins,
+.partner-banner-fps {
   width: 100%;
   height: 100%;
   padding: 32px 24px;
@@ -3103,29 +3111,34 @@ body.theme-matrix-code {
   text-align: center;
 }
 
-.promo-card-cs-server {
+.ad-banner-cs-server,
+.partner-banner-cs {
   background: linear-gradient(135deg, #201202 0%, #462502 100%);
   border-top: 5px solid #ff9d00;
 }
 
-.promo-card-skins-loot {
+.ad-banner-skins-loot,
+.partner-banner-skins {
   background: linear-gradient(135deg, #200428 0%, #4a0c5c 100%);
   border-top: 5px solid #d900d9;
 }
 
-.promo-card-fps-booster {
+.ad-banner-fps-booster,
+.partner-banner-fps {
   background: linear-gradient(135deg, #031c0e 0%, #0d4625 100%);
   border-top: 5px solid var(--accent);
 }
 
-.promo-text-section {
+.ad-text-section,
+.partner-text-group {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
 }
 
-.promo-main-title {
+.ad-main-text,
+.partner-title {
   font-family: var(--font-head);
   font-size: 22px;
   font-weight: 700;
@@ -3135,19 +3148,23 @@ body.theme-matrix-code {
   margin: 0;
 }
 
-.promo-card-cs-server .promo-main-title {
+.ad-banner-cs-server .ad-main-text,
+.partner-banner-cs .partner-title {
   text-shadow: 0 0 12px rgba(255, 157, 0, 0.4);
 }
 
-.promo-card-skins-loot .promo-main-title {
+.ad-banner-skins-loot .ad-main-text,
+.partner-banner-skins .partner-title {
   text-shadow: 0 0 12px rgba(217, 0, 217, 0.5);
 }
 
-.promo-card-fps-booster .promo-main-title {
+.ad-banner-fps-booster .ad-main-text,
+.partner-banner-fps .partner-title {
   text-shadow: 0 0 12px rgba(0, 255, 136, 0.4);
 }
 
-.promo-subtitle {
+.ad-sub-text,
+.partner-desc {
   font-size: 13px;
   margin: 0;
   font-family: var(--font-main);
@@ -3155,11 +3172,15 @@ body.theme-matrix-code {
   max-width: 500px;
 }
 
-.promo-card-cs-server .promo-subtitle { color: #d9c1aa; }
-.promo-card-skins-loot .promo-subtitle { color: #ecc6fa; }
-.promo-card-fps-booster .promo-subtitle { color: #c4eccf; }
+.ad-banner-cs-server .ad-sub-text,
+.partner-banner-cs .partner-desc { color: #d9c1aa; }
+.ad-banner-skins-loot .ad-sub-text,
+.partner-banner-skins .partner-desc { color: #ecc6fa; }
+.ad-banner-fps-booster .ad-sub-text,
+.partner-banner-fps .partner-desc { color: #c4eccf; }
 
-.promo-action-btn {
+.ad-action-btn,
+.partner-btn {
   border: none;
   padding: 10px 24px;
   font-size: 11px;
@@ -3172,37 +3193,43 @@ body.theme-matrix-code {
   cursor: pointer;
 }
 
-.promo-card-cs-server .promo-action-btn {
+.ad-banner-cs-server .ad-action-btn,
+.partner-banner-cs .partner-btn {
   background: #ff9d00;
   color: #0c0803;
   box-shadow: 0 4px 12px rgba(255, 157, 0, 0.3);
 }
 
-.promo-card-skins-loot .promo-action-btn {
+.ad-banner-skins-loot .ad-action-btn,
+.partner-banner-skins .partner-btn {
   background: #d900d9;
   color: #ffffff;
   box-shadow: 0 4px 12px rgba(217, 0, 217, 0.3);
 }
 
-.promo-card-fps-booster .promo-action-btn {
+.ad-banner-fps-booster .ad-action-btn,
+.partner-banner-fps .partner-btn {
   background: var(--accent);
   color: #021a0f;
   box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
 }
 
-.promo-spot-card:hover .promo-card-cs-server .promo-action-btn {
+.simulated-ad-banner:hover .ad-banner-cs-server .ad-action-btn,
+.promo-banner-box:hover .partner-banner-cs .partner-btn {
   background: #ffb433;
   box-shadow: 0 6px 20px rgba(255, 157, 0, 0.5);
   transform: scale(1.03);
 }
 
-.promo-spot-card:hover .promo-card-skins-loot .promo-action-btn {
+.simulated-ad-banner:hover .ad-banner-skins-loot .ad-action-btn,
+.promo-banner-box:hover .partner-banner-skins .partner-btn {
   background: #ff1aff;
   box-shadow: 0 6px 20px rgba(217, 0, 217, 0.5);
   transform: scale(1.03);
 }
 
-.promo-spot-card:hover .promo-card-fps-booster .promo-action-btn {
+.simulated-ad-banner:hover .ad-banner-fps-booster .ad-action-btn,
+.promo-banner-box:hover .partner-banner-fps .partner-btn {
   background: #33ff99;
   box-shadow: 0 6px 20px rgba(0, 255, 136, 0.5);
   transform: scale(1.03);
@@ -3210,29 +3237,36 @@ body.theme-matrix-code {
 
 /* Responsive Mobile Layout for large cover banners */
 @media (max-width: 768px) {
-  .promo-spot-card {
+  .simulated-ad-banner,
+  .promo-banner-box {
     width: 100%;
     max-width: 320px;
     height: 160px;
   }
   
-  .promo-card-cs-server,
-  .promo-card-skins-loot,
-  .promo-card-fps-booster {
+  .ad-banner-cs-server,
+  .ad-banner-skins-loot,
+  .ad-banner-fps-booster,
+  .partner-banner-cs,
+  .partner-banner-skins,
+  .partner-banner-fps {
     padding: 16px;
     gap: 8px;
   }
   
-  .ad-main-text {
+  .ad-main-text,
+  .partner-title {
     font-size: 14px;
   }
   
-  .ad-sub-text {
+  .ad-sub-text,
+  .partner-desc {
     font-size: 10.5px;
     line-height: 1.3;
   }
   
-  .ad-action-btn {
+  .ad-action-btn,
+  .partner-btn {
     padding: 6px 16px;
     font-size: 9px;
     width: 100%;
