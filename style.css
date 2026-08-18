@@ -3035,8 +3035,7 @@ body.theme-matrix-code {
 }
 
 /* ── Download Ad Modal Styles ── */
-.simulated-ad-banner,
-.promo-banner-box {
+.simulated-ad-banner {
   width: 100%;
   max-width: 800px;
   height: 250px;
@@ -3055,20 +3054,17 @@ body.theme-matrix-code {
   margin: 0 auto;
 }
 
-.simulated-ad-banner:hover,
-.promo-banner-box:hover {
+.simulated-ad-banner:hover {
   border-color: rgba(0, 255, 136, 0.5);
   box-shadow: inset 0 0 15px rgba(0, 255, 136, 0.1), 0 8px 24px rgba(0, 0, 0, 0.6);
   transform: translateY(-2px);
 }
 
-.simulated-ad-banner:active,
-.promo-banner-box:active {
+.simulated-ad-banner:active {
   transform: translateY(1px);
 }
 
-.simulated-ad-banner .ad-badge,
-.promo-banner-box .partner-badge {
+.simulated-ad-banner .ad-badge {
   position: absolute;
   top: 8px;
   left: 8px;
@@ -3085,8 +3081,7 @@ body.theme-matrix-code {
   letter-spacing: 0.5px;
 }
 
-.simulated-ad-banner .ad-content,
-.promo-banner-box .partner-content-box {
+.simulated-ad-banner .ad-content {
   width: 100%;
   height: 100%;
   text-decoration: none;
@@ -3095,10 +3090,7 @@ body.theme-matrix-code {
 /* Ad Template Base (Flex Column stacked vertically like a large Cover) */
 .ad-banner-cs-server,
 .ad-banner-skins-loot,
-.ad-banner-fps-booster,
-.partner-banner-cs,
-.partner-banner-skins,
-.partner-banner-fps {
+.ad-banner-fps-booster {
   width: 100%;
   height: 100%;
   padding: 32px 24px;
@@ -3111,34 +3103,29 @@ body.theme-matrix-code {
   text-align: center;
 }
 
-.ad-banner-cs-server,
-.partner-banner-cs {
+.ad-banner-cs-server {
   background: linear-gradient(135deg, #201202 0%, #462502 100%);
   border-top: 5px solid #ff9d00;
 }
 
-.ad-banner-skins-loot,
-.partner-banner-skins {
+.ad-banner-skins-loot {
   background: linear-gradient(135deg, #200428 0%, #4a0c5c 100%);
   border-top: 5px solid #d900d9;
 }
 
-.ad-banner-fps-booster,
-.partner-banner-fps {
+.ad-banner-fps-booster {
   background: linear-gradient(135deg, #031c0e 0%, #0d4625 100%);
   border-top: 5px solid var(--accent);
 }
 
-.ad-text-section,
-.partner-text-group {
+.ad-text-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
 }
 
-.ad-main-text,
-.partner-title {
+.ad-main-text {
   font-family: var(--font-head);
   font-size: 22px;
   font-weight: 700;
@@ -3148,23 +3135,19 @@ body.theme-matrix-code {
   margin: 0;
 }
 
-.ad-banner-cs-server .ad-main-text,
-.partner-banner-cs .partner-title {
+.ad-banner-cs-server .ad-main-text {
   text-shadow: 0 0 12px rgba(255, 157, 0, 0.4);
 }
 
-.ad-banner-skins-loot .ad-main-text,
-.partner-banner-skins .partner-title {
+.ad-banner-skins-loot .ad-main-text {
   text-shadow: 0 0 12px rgba(217, 0, 217, 0.5);
 }
 
-.ad-banner-fps-booster .ad-main-text,
-.partner-banner-fps .partner-title {
+.ad-banner-fps-booster .ad-main-text {
   text-shadow: 0 0 12px rgba(0, 255, 136, 0.4);
 }
 
-.ad-sub-text,
-.partner-desc {
+.ad-sub-text {
   font-size: 13px;
   margin: 0;
   font-family: var(--font-main);
@@ -3172,15 +3155,11 @@ body.theme-matrix-code {
   max-width: 500px;
 }
 
-.ad-banner-cs-server .ad-sub-text,
-.partner-banner-cs .partner-desc { color: #d9c1aa; }
-.ad-banner-skins-loot .ad-sub-text,
-.partner-banner-skins .partner-desc { color: #ecc6fa; }
-.ad-banner-fps-booster .ad-sub-text,
-.partner-banner-fps .partner-desc { color: #c4eccf; }
+.ad-banner-cs-server .ad-sub-text { color: #d9c1aa; }
+.ad-banner-skins-loot .ad-sub-text { color: #ecc6fa; }
+.ad-banner-fps-booster .ad-sub-text { color: #c4eccf; }
 
-.ad-action-btn,
-.partner-btn {
+.ad-action-btn {
   border: none;
   padding: 10px 24px;
   font-size: 11px;
@@ -3193,43 +3172,37 @@ body.theme-matrix-code {
   cursor: pointer;
 }
 
-.ad-banner-cs-server .ad-action-btn,
-.partner-banner-cs .partner-btn {
+.ad-banner-cs-server .ad-action-btn {
   background: #ff9d00;
   color: #0c0803;
   box-shadow: 0 4px 12px rgba(255, 157, 0, 0.3);
 }
 
-.ad-banner-skins-loot .ad-action-btn,
-.partner-banner-skins .partner-btn {
+.ad-banner-skins-loot .ad-action-btn {
   background: #d900d9;
   color: #ffffff;
   box-shadow: 0 4px 12px rgba(217, 0, 217, 0.3);
 }
 
-.ad-banner-fps-booster .ad-action-btn,
-.partner-banner-fps .partner-btn {
+.ad-banner-fps-booster .ad-action-btn {
   background: var(--accent);
   color: #021a0f;
   box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
 }
 
-.simulated-ad-banner:hover .ad-banner-cs-server .ad-action-btn,
-.promo-banner-box:hover .partner-banner-cs .partner-btn {
+.simulated-ad-banner:hover .ad-banner-cs-server .ad-action-btn {
   background: #ffb433;
   box-shadow: 0 6px 20px rgba(255, 157, 0, 0.5);
   transform: scale(1.03);
 }
 
-.simulated-ad-banner:hover .ad-banner-skins-loot .ad-action-btn,
-.promo-banner-box:hover .partner-banner-skins .partner-btn {
+.simulated-ad-banner:hover .ad-banner-skins-loot .ad-action-btn {
   background: #ff1aff;
   box-shadow: 0 6px 20px rgba(217, 0, 217, 0.5);
   transform: scale(1.03);
 }
 
-.simulated-ad-banner:hover .ad-banner-fps-booster .ad-action-btn,
-.promo-banner-box:hover .partner-banner-fps .partner-btn {
+.simulated-ad-banner:hover .ad-banner-fps-booster .ad-action-btn {
   background: #33ff99;
   box-shadow: 0 6px 20px rgba(0, 255, 136, 0.5);
   transform: scale(1.03);
@@ -3237,8 +3210,7 @@ body.theme-matrix-code {
 
 /* Responsive Mobile Layout for large cover banners */
 @media (max-width: 768px) {
-  .simulated-ad-banner,
-  .promo-banner-box {
+  .simulated-ad-banner {
     width: 100%;
     max-width: 320px;
     height: 160px;
@@ -3246,27 +3218,21 @@ body.theme-matrix-code {
   
   .ad-banner-cs-server,
   .ad-banner-skins-loot,
-  .ad-banner-fps-booster,
-  .partner-banner-cs,
-  .partner-banner-skins,
-  .partner-banner-fps {
+  .ad-banner-fps-booster {
     padding: 16px;
     gap: 8px;
   }
   
-  .ad-main-text,
-  .partner-title {
+  .ad-main-text {
     font-size: 14px;
   }
   
-  .ad-sub-text,
-  .partner-desc {
+  .ad-sub-text {
     font-size: 10.5px;
     line-height: 1.3;
   }
   
-  .ad-action-btn,
-  .partner-btn {
+  .ad-action-btn {
     padding: 6px 16px;
     font-size: 9px;
     width: 100%;

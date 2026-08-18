@@ -44,8 +44,8 @@
 
       // Crear elemento trampa visible (pero fuera de pantalla para el usuario)
       const fakeAd = document.createElement('div');
-      fakeAd.id = 'partner-slot-check';
-      fakeAd.className = 'sponsor-box partner-slot promo-container';
+      fakeAd.id = 'ad-banner-top';
+      fakeAd.className = 'adsbygoogle ad-banner pub_300x250 text-ad ad_box ad-slot';
       fakeAd.style.cssText = 'width: 100px !important; height: 100px !important; position: absolute !important; left: -9999px !important; top: -9999px !important; display: block !important; visibility: visible !important;';
       fakeAd.innerHTML = '&nbsp;';
       document.body.appendChild(fakeAd);

@@ -2695,73 +2695,17 @@ const APP = {
     else if (filename.endsWith('.zip')) icon = '📦';
     if (fileIconEl) fileIconEl.textContent = icon;
 
-    // Fallback rotating banners generator
-    const renderFallbackBanner = () => {
-      if (!adContentEl) return;
-      const ads = [
-        `
-        <div class="partner-banner-cs" id="ad-server-banner">
-          <div class="partner-text-group">
-            <h4 class="partner-title">🏆 SERVIDORES PREMIUM CS 1.6 🏆</h4>
-            <p class="partner-desc">Ping bajo y anti-cheat. IP: <b>cs.luvia.gg:27015</b> (Click para copiar)</p>
-          </div>
-          <button class="partner-btn">Copiar IP</button>
-        </div>
-        `,
-        `
-        <div class="partner-banner-skins" id="ad-skins-banner">
-          <div class="partner-text-group">
-            <h4 class="partner-title">🎁 ¡SORTEO DE SKINS DIARIAS! 🎁</h4>
-            <p class="partner-desc">Reclama tu tirada gratis de skins de CS:GO/CS2 hoy.</p>
-          </div>
-          <button class="partner-btn">Reclamar</button>
-        </div>
-        `,
-        `
-        <div class="partner-banner-fps" id="ad-fps-banner">
-          <div class="partner-text-group">
-            <h4 class="partner-title">🚀 CS 1.6 REGISTRY OPTIMIZER 🚀</h4>
-            <p class="partner-desc">Optimiza los rates y estabiliza tus FPS en 100 estables.</p>
-          </div>
-          <button class="partner-btn">Optimizar</button>
-        </div>
-        `
-      ];
-
-      const randomAdIndex = Math.floor(Math.random() * ads.length);
-      adContentEl.innerHTML = ads[randomAdIndex];
-
-      // Bind click events on fallbacks
-      setTimeout(() => {
-        const serverBanner = adContentEl.querySelector('#ad-server-banner');
-        if (serverBanner) {
-          serverBanner.addEventListener('click', (e) => {
-            e.stopPropagation();
-            navigator.clipboard.writeText('cs.luvia.gg:27015');
-            if (typeof showToast === 'function') showToast('IP copiada al portapapeles: cs.luvia.gg:27015', 'success');
-          });
-        }
-
-        const skinsBanner = adContentEl.querySelector('#ad-skins-banner');
-        if (skinsBanner) {
-          skinsBanner.addEventListener('click', (e) => {
-            e.stopPropagation();
-            window.open('https://discord.gg/Luviagg', '_blank');
-          });
-        }
-
-        const fpsBanner = adContentEl.querySelector('#ad-fps-banner');
-        if (fpsBanner) {
-          fpsBanner.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (typeof showToast === 'function') showToast('Descargando optimizador...', 'info');
-          });
-        }
-      }, 50);
-    };
-
-    // Render internal banner immediately so it is guaranteed to show
-    renderFallbackBanner();
+    // Set AdSense block
+    if (adContentEl) {
+      adContentEl.innerHTML = `
+        <ins class="adsbygoogle"
+             style="display:block;width:100%;height:100%;"
+             data-ad-format="fluid"
+             data-ad-layout-key="-7c+eo+1+2-5"
+             data-ad-client="ca-pub-3295246390356947"
+             data-ad-slot="5660597739"></ins>
+      `;
+    }
 
     // Reset UI state
     if (loaderSection) loaderSection.classList.remove('hidden');
@@ -2772,6 +2716,82 @@ const APP = {
 
     // Show modal
     modal.classList.remove('hidden');
+
+    // Trigger AdSense loading after container is visible
+    let adsenseLoaded = false;
+    if (window.adsbygoogle && typeof window.adsbygoogle.push === 'function') {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        adsenseLoaded = true;
+      } catch (e) {
+        console.warn("AdSense push failed:", e);
+      }
+    }
+
+    if (!adsenseLoaded && adContentEl) {
+      // Fallback rotating banners
+      const ads = [
+        `
+        <div class="ad-banner-cs-server" id="ad-server-banner">
+          <div class="ad-text-section">
+            <h4 class="ad-main-text">🏆 SERVIDORES PREMIUM CS 1.6 🏆</h4>
+            <p class="ad-sub-text">Ping bajo y anti-cheat. IP: <b>cs.luvia.gg:27015</b> (Click para copiar)</p>
+          </div>
+          <button class="ad-action-btn">Copiar IP</button>
+        </div>
+        `,
+        `
+        <div class="ad-banner-skins-loot" id="ad-skins-banner">
+          <div class="ad-text-section">
+            <h4 class="ad-main-text">🎁 ¡SORTEO DE SKINS DIARIAS! 🎁</h4>
+            <p class="ad-sub-text">Reclama tu tirada gratis de skins de CS:GO/CS2 hoy.</p>
+          </div>
+          <button class="ad-action-btn">Reclamar</button>
+        </div>
+        `,
+        `
+        <div class="ad-banner-fps-booster" id="ad-fps-banner">
+          <div class="ad-text-section">
+            <h4 class="ad-main-text">🚀 CS 1.6 REGISTRY OPTIMIZER 🚀</h4>
+            <p class="ad-sub-text">Optimiza los rates y estabiliza tus FPS en 100 estables.</p>
+          </div>
+          <button class="ad-action-btn">Optimizar</button>
+        </div>
+        `
+      ];
+
+      const randomAdIndex = Math.floor(Math.random() * ads.length);
+      adContentEl.innerHTML = ads[randomAdIndex];
+
+      // Setup click listeners
+      const serverBanner = adContentEl.querySelector('#ad-server-banner');
+      if (serverBanner) {
+        serverBanner.addEventListener('click', (e) => {
+          e.preventDefault();
+          navigator.clipboard.writeText('cs.luvia.gg:27015').then(() => {
+            showToast('✅ IP copiada: cs.luvia.gg:27015. ¡Añádela a favoritos!', 'success');
+          });
+        });
+      }
+
+      const skinsBanner = adContentEl.querySelector('#ad-skins-banner');
+      if (skinsBanner) {
+        skinsBanner.addEventListener('click', (e) => {
+          e.preventDefault();
+          showToast('🔗 Abriendo sorteo de skins (simulado)...', 'info');
+          window.open('https://store.steampowered.com/app/10/CounterStrike/', '_blank');
+        });
+      }
+
+      const fpsBanner = adContentEl.querySelector('#ad-fps-banner');
+      if (fpsBanner) {
+        fpsBanner.addEventListener('click', (e) => {
+          e.preventDefault();
+          showToast('🔗 Abriendo optimizador FPS (simulado)...', 'info');
+          window.open('https://github.com/luviagg/luviagg.github.io', '_blank');
+        });
+      }
+    }
 
     // Draw copy preview canvas AFTER showing modal to ensure correct clientWidth
     if (isCopy && copyCanvas) {
